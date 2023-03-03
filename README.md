@@ -1,15 +1,15 @@
 Contexte :
     Les données viennent de Kaggle. Il y en a plusieurs :
-    - Cherry Blossom Blooming Prediction, (AKIO ONODERA · UPDATED 2 MONTHS AGO),
+   - Cherry Blossom Blooming Prediction, (AKIO ONODERA · UPDATED 2 MONTHS AGO),
         contexte : Predict the blossoming date of cherry blossoms by analyzing past temperature                  data and  flowering information.
 
-    - Starter: Japanese Cherry Blossom Data 1692b14a-e, (KAGGLE KERNELER · 2Y AGO),
+   - Starter: Japanese Cherry Blossom Data 1692b14a-e, (KAGGLE KERNELER · 2Y AGO),
         contexte : This is an automatically-generated kernel with starter code demonstrating how to read in the data and begin exploring.
 
-    - Ramen EDA, (MAAZ KHAN · 2Y AGO),
+   - Ramen EDA, (MAAZ KHAN · 2Y AGO),
         contexte : Il y a des informations sur la marque, la variété et le style.
 
-    - Japanese Jôyô Kanji (ANTHAUS · UPDATED 3 YEARS)
+   - Japanese Jôyô Kanji (ANTHAUS · UPDATED 3 YEARS)
         contexte : "Jôyô kanji" is the official list of kanji, announced by the Japanese Ministry of Education, of all the kanji every Japanese adult is supposed to know.
 
 Description : Toutes les données sont au format CSV.
