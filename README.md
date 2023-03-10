@@ -1,5 +1,9 @@
 <g>Contexte :</g>
     Les données viennent de Kaggle. Il y en a plusieurs :
+
+   - Haiku Dataset, (HARSHIT JHALANI · UPDATED 3 YEARS AGO),
+          <br><i>contexte</i> :These English haikus are collected from multiple sources. Haiku is a type of short-form poetry originally from Japan. Haiku in English has a fixed-form 5-3-5 syllable (or 3-5-3 word) haiku is sometimes known as a lune.
+
    - Cherry Blossom Blooming Prediction, (AKIO ONODERA · UPDATED 2 MONTHS AGO),
         <br><i>contexte</i> : Predict the blossoming date of cherry blossoms by analyzing past temperature data and  flowering information.
 
