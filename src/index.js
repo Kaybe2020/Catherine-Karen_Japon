@@ -1,6 +1,6 @@
-import * as d3 from "d3";
 // Importation des fichiers CSV
 import { csv } from "d3-fetch";
+
 csv("../data/joyo_kanji.csv").then(function (data) {
   // Code de la visualisation ()
   console.log("Test 1", data);
