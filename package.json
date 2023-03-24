@@ -1,5 +1,5 @@
 {
-  "name": "03-d3-data",
+  "name": "japan",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@rollup/plugin-dsv": "^3.0.2",
     "vite": "^4.1.4"
   },
   "dependencies": {
+    "d3-fetch": "^3.0.1",
     "d3-selection": "^3.0.0"
   }
 }
