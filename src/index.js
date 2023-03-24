@@ -1,18 +1,30 @@
 // Importation des fichiers CSV
 import { csv } from "d3-fetch";
 
-csv("../data/joyo_kanji.csv").then(function (data) {
-  // Code de la visualisation ()
-  console.log("Test 1", data);
-  data.forEach((kanji) => {
-    // mettre les éléments  des données csv de l'index 2 dans un tableau
-    let oldKanji = [];
-    let newKanji = [];
-    if (kanji[2] == "old") {
-      oldKanji.push(kanji);
-      console.log("old kanji", oldKanji);
-    } else if (kanji[1] == "new") {
-      newKanji.push(kanji);
+
+//*** Traduction Kanji *********************/
+csv("../data/joyo_kanji.csv")
+  .then(function (data) {
+    // Code de la visualisation ()
+    let kanjiListe = {
+      ecritJap: [],
+      traduction: []
     }
+    data.forEach((kanji) => {
+      //affiche les nouveaux kanji
+      kanjiListe.ecritJap.push(kanji.new);
+      //  fetch de lapi qui retourne qqch et afficher ce truc 
+
+
+
+    });
+    console.log(kanjiListe);
+  })
+  .catch(function (error) {
+    console.log(error);
   });
-});
+
+
+
+
+

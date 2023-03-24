@@ -1,6 +1,6 @@
-/* !! Trouver la typo du site (style japonais) 
-importation police ici*/
-
-body {
-    background-image: "./img/background.jpeg";
+#arrierePlan {
+    background-image: url("img/background.jpeg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+   
 }
