@@ -38,6 +38,7 @@ csv("../data/all_haiku.csv")
   });
 
 
+
 //*** Sakura ********************************************************************************/
 
 
@@ -55,6 +56,7 @@ csv("../data/ramen-ratings.csv")
     data.forEach((ramen) => {
       // trier les informations et ne prendre que les ramens du Japon
       if (ramen.Country == "Japan")
+        // prendre nom, description et étoiles des ramens
         ramenJapon.push({
           nom: ramen.Brand,
           description: ramen.Variety,
@@ -64,5 +66,30 @@ csv("../data/ramen-ratings.csv")
     console.log(ramenJapon);
   });
 
+
+//*** Haijin ********************************************************************************/
+//le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
+const svgHaijin = d3.select("#haijin")
+const perso = svgHaijin.select("#haijinPerso")
+
+  // le haijin bouge seulement quand il y a du scroll
+  .on("scroll", function () {
+    function moveHaijin() {
+      perso
+        .transition()
+        .duration(1000)
+        // .ease(d3.easeLinear)
+        .attr("transform", function () {
+          return d3.interpolateString("translateY(0, -10px)", "translate(0, 0)");
+        })
+        .transition()
+        .duration(1000)
+        .attr("transform", function () {
+          return d3.interpolateString("translateY(0, 0px)", "translate(0, -10)");
+        })
+        .on("end", moveHaijin);
+    }
+    moveHaijin();
+  });
 
 
