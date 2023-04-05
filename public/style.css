@@ -93,7 +93,7 @@ li a:hover {
     background-color:#f0f0f0c8;/*rgba(254, 195, 238, 0.413)*/
     width: 75%;
     margin-bottom: 2.5rem;
-    padding: 8px 0;
+    padding: 0 8px;
 }
 
 #haijin {
