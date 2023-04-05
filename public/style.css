@@ -68,12 +68,14 @@ ul {
     margin: 0;
     padding: 0;
     width: 155px;
-    /* background-color: #f1f1f1; */
+    background-color: #5d8fdfd7;
 }
 
 li a {
     display: block;
-    color: #5ce9ff;
+    color: #f0f0f0;
+    /* color: #f823a3; */
+    /* color: #fa0a56; */
     font-family: 'bonzairegular';
     font-size: 1.5rem;
     padding: 8px 0 8px 16px;
@@ -81,14 +83,17 @@ li a {
 }
 
 li a:hover {
-    /* background-color: #555; */
-    color: #4b012d;
+    background-color: #fbe1f1c1;
+    /* background-color: #f0f0f0; */
+    /* color: #4b012d; */
+    color: #f823a3;
 }
 
 #histoire {
-    /* background-color: rgba(254, 195, 238, 0.413); */
+    background-color:#f0f0f0c8;/*rgba(254, 195, 238, 0.413)*/
     width: 75%;
-    height: 100%;
+    margin-bottom: 2.5rem;
+    padding: 8px 0;
 }
 
 #haijin {
