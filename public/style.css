@@ -90,8 +90,12 @@ li a:hover {
 }
 
 #histoire {
-    background-color:#f0f0f0c8;/*rgba(254, 195, 238, 0.413)*/
+    background-color: #f0f0f0c8;
+    /*rgba(254, 195, 238, 0.413)*/
     width: 75%;
+    /* pour pouvoir scroll dans la div */
+    height: 62vh;
+    overflow: auto;
     margin-bottom: 2.5rem;
     padding: 0 8px;
 }
