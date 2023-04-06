@@ -24,14 +24,8 @@ body {
     display: grid;
 }
 
-/* header {
-    background-color: brown;
-    height: 20%;   
-} */
 
 main {
-    /* pour fixer le footer en bas de page */
-    /* padding-bottom: 2.5rem; */
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
@@ -55,43 +49,57 @@ main {
     height: 100%;
     display: flex;
     flex-direction: row;
-    /* background-color: blueviolet; */
+}
+
+#menuImg {
+    cursor: pointer;
 }
 
 #menu {
-    /* background-color: orange; */
+
+    text-align: center;
+    cursor: pointer;
+}
+
+#menuBurger {
     width: 10%;
+}
+
+#menuDeroulant {
+    transform: translateX(-500%);
+    transition: transform 0.4s ease-in-out;
+    z-index: 1000;
+}
+
+#menuDeroulant.active {
+    transform: translateX(0);
 }
 
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 155px;
+    width: 100%;
     background-color: #5d8fdfd7;
 }
 
 li a {
     display: block;
     color: #f0f0f0;
-    /* color: #f823a3; */
-    /* color: #fa0a56; */
     font-family: 'bonzairegular';
     font-size: 1.5rem;
-    padding: 8px 0 8px 16px;
+    padding: 8px 0 6px 16px;
     text-decoration: none;
 }
 
 li a:hover {
     background-color: #fbe1f1c1;
-    /* background-color: #f0f0f0; */
-    /* color: #4b012d; */
     color: #f823a3;
+    transition: transform 0.4s ease-in-out;
 }
 
 #histoire {
     background-color: #f0f0f0c8;
-    /*rgba(254, 195, 238, 0.413)*/
     width: 75%;
     /* pour pouvoir scroll dans la div */
     height: 62vh;
@@ -101,7 +109,6 @@ li a:hover {
 }
 
 #haijin {
-    /* background-color: aqua; */
     width: 10%;
     align-items: end;
     display: flex;
@@ -112,7 +119,6 @@ li a:hover {
 }
 
 footer {
-    /* background-color: green; */
     width: 100%;
     height: 2.5rem;
     text-align: center;

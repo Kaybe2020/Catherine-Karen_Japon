@@ -1,5 +1,54 @@
+// Importation Select, utile pour le Burger et le Haijin
+import { select } from "d3-selection";
 // Importation des fichiers CSV
 import { csv } from "d3-fetch";
+
+//*** menu burger **************************************************************************************/
+select("#menu").on("click", function () {
+  const menu = document.querySelector("#menuDeroulant").classList;
+  if (menu.contains("active")) {
+    menu.remove("active");
+  } else {
+    menu.add("active");
+  }
+
+});
+
+
+//*** Sakura *******************************************************************************************/
+// Importation des floraisons des années passées
+csv("../data/hirosaki_temp_cherry_bloom.csv")
+  .then(function (data) {
+    df = DataFrame(data_csv) //  Création d'un dataframe à partir du csv.
+
+    //  Séparer la data entre année, mois et jour 
+    dateList = df['date'].str.split('/', expand = True)
+    df['year'], df['month'], df['day'] = dateList[0], dateList[1], dateList[2]
+    df.info()
+    console.log(df)
+  });
+// IMPOORTATION EN COURS PAS FINIE
+
+//importation donnéqes météo
+
+// Importation des floraisons de l'année en cours (donncées croisées avec météo 2023)
+
+
+//*** Haiku ********************************************************************************************/
+csv("../data/all_haiku.csv")
+  .then(function (data) {
+    // Code de la visualisation ()
+    let haikuListe = {
+      haikus: [],
+      haijin: []
+    }
+    data.forEach((haiku) => {
+      //affiche les nouveaux haiku
+      haikuListe.haikus.push([haiku.ligne0, haiku.ligne1, haiku.ligne2]);
+      haikuListe.haijin.push(haiku.source);
+    });
+    console.log(haikuListe);
+  });
 
 
 //*** Traduction Kanji *********************************************************************************/
@@ -21,24 +70,7 @@ csv("../data/joyo_kanji.csv")
   });
 
 
-//*** Haiku ********************************************************************************/
-csv("../data/all_haiku.csv")
-  .then(function (data) {
-    // Code de la visualisation ()
-    let haikuListe = {
-      haikus: [],
-      haijin: []
-    }
-    data.forEach((haiku) => {
-      //affiche les nouveaux haiku
-      haikuListe.haikus.push([haiku.ligne0, haiku.ligne1, haiku.ligne2]);
-      haikuListe.haijin.push(haiku.source);
-    });
-    console.log(haikuListe);
-  });
-
-
-//*** Ramen ********************************************************************************/
+//*** Ramen ********************************************************************************************/
 csv("../data/ramen-ratings.csv")
   .then(function (data) {
     let ramenJapon = []
@@ -56,23 +88,22 @@ csv("../data/ramen-ratings.csv")
   });
 
 
-//*** Haijin ********************************************************************************/
+//*** Haijin *******************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
-const svgHaijin = d3.select("#haijin")
+const svgHaijin = select("#haijin")
 const perso = svgHaijin.select("#haijinPerso")
-
   // le haijin bouge seulement quand il y a du scroll
   .on("scroll", function () {
     function moveHaijin() {
       perso
         .transition()
-        .duration(1000)
+        .duration(500)
         // .ease(d3.easeLinear)
         .attr("transform", function () {
           return d3.interpolateString("translateY(0, -10px)", "translate(0, 0)");
         })
         .transition()
-        .duration(1000)
+        .duration(500)
         .attr("transform", function () {
           return d3.interpolateString("translateY(0, 0px)", "translate(0, -10)");
         })
