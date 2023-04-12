@@ -17,16 +17,16 @@ select("#menu").on("click", function () {
 
 //*** Sakura *******************************************************************************************/
 // Importation des floraisons des années passées
-csv("../data/hirosaki_temp_cherry_bloom.csv")
-  .then(function (data) {
-    df = DataFrame(data_csv) //  Création d'un dataframe à partir du csv.
+// csv("../data/hirosaki_temp_cherry_bloom.csv")
+//   .then(function (data) {
+//     df = DataFrame(data_csv) //  Création d'un dataframe à partir du csv.
 
-    //  Séparer la data entre année, mois et jour 
-    dateList = df['date'].str.split('/', expand = True)
-    df['year'], df['month'], df['day'] = dateList[0], dateList[1], dateList[2]
-    df.info()
-    console.log(df)
-  });
+//     //  Séparer la data entre année, mois et jour 
+//     dateList = df['date'].str.split('/', expand = True)
+//     df['year'], df['month'], df['day'] = dateList[0], dateList[1], dateList[2]
+//     df.info()
+//     console.log(df)
+//   });
 // IMPOORTATION EN COURS PAS FINIE
 
 //importation donnéqes météo
@@ -47,12 +47,14 @@ csv("../data/all_haiku.csv")
       haikuListe.haikus.push([haiku.ligne0, haiku.ligne1, haiku.ligne2]);
       haikuListe.haijin.push(haiku.source);
     });
-    console.log(haikuListe);
+    // console.log(haikuListe);
+    // affiche une donnée au hasard dans la div #haikus
+    select("#haikus").html(haikuListe.haikus[Math.floor(Math.random() * haikuListe.haikus.length)]);
   });
 
 
 //*** Traduction Kanji *********************************************************************************/
-csv("../data/joyo_kanji.csv")
+csv("../data/joyo_processed.csv")
   .then(function (data) {
     // Code de la visualisation ()
     let kanjiListe = {
@@ -62,8 +64,17 @@ csv("../data/joyo_kanji.csv")
     data.forEach((kanji) => {
       //affiche les nouveaux kanji
       kanjiListe.ecritJap.push(kanji.new);
+      kanjiListe.traduction.push(kanji.translation);
     });
     console.log(kanjiListe);
+    //affiche une donnée aléatoire écritJap et sa traduction dans la div #kanjis
+    select("#kanjis").html(kanjiListe.ecritJap[Math.floor(Math.random() * kanjiListe.ecritJap.length)] + " : " + kanjiListe.traduction[Math.floor(Math.random() * kanjiListe.traduction.length)]);
+    
+
+
+    
+
+
   })
   .catch(function (error) {
     console.log(error);
@@ -84,7 +95,7 @@ csv("../data/ramen-ratings.csv")
           topTen: ramen.Stars
         });
     });
-    console.log(ramenJapon);
+    // console.log(ramenJapon);
   });
 
 
@@ -98,7 +109,7 @@ const perso = svgHaijin.select("#haijinPerso")
       perso
         .transition()
         .duration(500)
-        // .ease(d3.easeLinear)
+        .ease(d3.easeLinear) // sert à faire une transition linéaire
         .attr("transform", function () {
           return d3.interpolateString("translateY(0, -10px)", "translate(0, 0)");
         })

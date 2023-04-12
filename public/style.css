@@ -36,8 +36,10 @@ main {
     width: 25%;
     margin-left: 10%;
     margin-bottom: 2rem;
-    padding: 8px 0 8px 16px;
+    padding: 8px 16px;
     text-align: center;
+    word-break: normal;
+    /* pour les mots trop longs, évite la césure*/
     color: #fd40b1;
     font-family: 'bonzairegular';
     font-size: 1.5rem;
@@ -102,10 +104,9 @@ li a:hover {
     background-color: #f0f0f0c8;
     width: 75%;
     /* pour pouvoir scroll dans la div */
-    height: 62vh;
+    height: 380px;
     overflow: auto;
-    margin-bottom: 2.5rem;
-    padding: 0 8px;
+    padding: 16px;
 }
 
 #haijin {
