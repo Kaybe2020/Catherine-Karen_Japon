@@ -12,6 +12,46 @@ d3.select("#menu").on("click", function () {
   }
 });
 
+
+//*** Haiku ********************************************************************************************/
+d3.csv("../data/haiku_karen.csv")
+  .then(function (data) {
+    // Code de la visualisation ()
+    let haikuListe = {
+      haikus: [],
+      haijin: [],
+      explication: [],
+    };
+    data.forEach((haiku) => {
+      //affiche les nouveaux haiku
+      haikuListe.haikus.push([haiku.ligne01, haiku.ligne02, haiku.ligne03]);
+      haikuListe.haijin.push([haiku.title, haiku.source]);
+      haikuListe.explication.push(haiku.explication);
+    });
+    // console.log(haikuListe);
+
+    //création d'un nombre random pour afficher le haiku et l'auteur en random
+    const randomHaiku = Math.floor(Math.random() * haikuListe.haikus.length);
+    //affiche le haiku et l'auteur
+    d3.select("#haiku").html(haikuListe.haikus[randomHaiku]);
+    d3.select("#titleAuthor").html(haikuListe.haijin[randomHaiku]);
+
+    //affiche la source du haiku dans un overlay quand on passe la souris sur la div #haikus
+    d3.select("#haikus").on("mouseover", function () {
+      //affiche l'overlay
+      d3.select("#overlay").style("display", "block");
+      // met l'overlay devant les autres éléments
+      d3.select("#overlay").style("z-index", "100");
+      //affiche la source du haiku
+      d3.select("#popup").html(haikuListe.explication[randomHaiku]);
+    });
+    //cache l'overlay quand on sort de la div haikus
+    d3.select("#haikus").on("mouseout", function () {
+      d3.select("#overlay").style("display", "none");
+    });
+  });
+
+
 //*** Sakura *******************************************************************************************/
 //cerisiers dates floraison
 //coordonnées gps+ coordonnes japon + notre fichier
@@ -145,25 +185,6 @@ d3.select("#menu").on("click", function () {
 })();
 
 
-//*** Haiku ********************************************************************************************/
-d3.csv("../data/all_haiku.csv")
-  .then(function (data) {
-    // Code de la visualisation ()
-    let haikuListe = {
-      haikus: [],
-      haijin: [],
-    };
-    data.forEach((haiku) => {
-      //affiche les nouveaux haiku
-      haikuListe.haikus.push([haiku.ligne0, haiku.ligne1, haiku.ligne2]);
-      haikuListe.haijin.push(haiku.source);
-    });
-    // console.log(haikuListe);
-    // affiche une donnée au hasard dans la div #haikus
-    d3.select("#haikus").html(haikuListe.haikus[Math.floor(Math.random() * haikuListe.haikus.length)]);
-  });
-
-
 //*** Traduction Kanji *********************************************************************************/
 d3.csv("../data/joyo_processed.csv")
   .then(function (data) {
@@ -177,11 +198,22 @@ d3.csv("../data/joyo_processed.csv")
       kanjiListe.ecritJap.push(kanji.new);
       kanjiListe.traduction.push(kanji.translation);
     });
-    //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
-    const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
-    console.log(kanjiListe.traduction);
-    //affiche une donnée aléatoire écritJap et sa traduction dans la div #kanjis
-    d3.select("#kanjis").html(kanjiListe.ecritJap[random] + " : " + kanjiListe.traduction[random]);
+
+    //créer un tableau vide pour stoquer des numéros aléatoires
+    const nombreRandom = [];
+    do {
+      //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
+      const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
+      //si le nombre n'est pas dans le tableau, on l'ajoute
+      if (!nombreRandom.includes(random)) {
+        nombreRandom.push(random);
+      }
+    } while (nombreRandom.length < 10);
+    // console.log(nombreRandom);
+    //Afficher les kanjis en fonction de nombrerandom
+    for (let i = 0; i < nombreRandom.length; i++) {
+      d3.select("#kanjis").append('p').html(kanjiListe.ecritJap[nombreRandom[i]] + " : " + kanjiListe.traduction[nombreRandom[i]]);
+    }
   })
   .catch(function (error) {
     console.log(error);
@@ -202,7 +234,8 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
         topTen: ramen.Stars,
       });
   });
-  console.log(ramenJapon);
+  // console.log(ramenJapon);
+  // A afficher dans div #ramen
 
   const trieScore = ramenJapon.sort(function compare(a, b) {
     if (a.topTen < b.topTen) return 1;
