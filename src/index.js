@@ -1,7 +1,4 @@
-// Importation Select, utile pour le Burger et le Haijin
-import { select } from "d3-selection";
-// Importation des fichiers CSV
-import { csv, json } from "d3-fetch";
+// Importation D3 (plus simple que de faire toutes les importations de ce que l'on a besoin)
 import * as d3 from "d3";
 
 
@@ -149,7 +146,7 @@ d3.select("#menu").on("click", function () {
 
 
 //*** Haiku ********************************************************************************************/
-csv("../data/all_haiku.csv")
+d3.csv("../data/all_haiku.csv")
   .then(function (data) {
     // Code de la visualisation ()
     let haikuListe = {
@@ -163,12 +160,12 @@ csv("../data/all_haiku.csv")
     });
     // console.log(haikuListe);
     // affiche une donnée au hasard dans la div #haikus
-    select("#haikus").html(haikuListe.haikus[Math.floor(Math.random() * haikuListe.haikus.length)]);
+    d3.select("#haikus").html(haikuListe.haikus[Math.floor(Math.random() * haikuListe.haikus.length)]);
   });
 
 
 //*** Traduction Kanji *********************************************************************************/
-d3.csv("../data/joyo_kanji.csv")
+d3.csv("../data/joyo_processed.csv")
   .then(function (data) {
     // Code de la visualisation ()
     let kanjiListe = {
@@ -180,9 +177,11 @@ d3.csv("../data/joyo_kanji.csv")
       kanjiListe.ecritJap.push(kanji.new);
       kanjiListe.traduction.push(kanji.translation);
     });
-    console.log(kanjiListe);
+    //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
+    const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
+    console.log(kanjiListe.traduction);
     //affiche une donnée aléatoire écritJap et sa traduction dans la div #kanjis
-    select("#kanjis").html(kanjiListe.ecritJap[Math.floor(Math.random() * kanjiListe.ecritJap.length)] + " : " + kanjiListe.traduction[Math.floor(Math.random() * kanjiListe.traduction.length)]);
+    d3.select("#kanjis").html(kanjiListe.ecritJap[random] + " : " + kanjiListe.traduction[random]);
   })
   .catch(function (error) {
     console.log(error);
@@ -218,17 +217,16 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
 
 //*** Haijin *******************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
-const svgHaijin = d3.select("#haijin");
-const perso = svgHaijin
-  .select("#haijinPerso")
+const perso = d3.select("#haijinPerso");
+d3.select("#histoire")
   // le haijin bouge seulement quand il y a du scroll
-  .on("scroll", function () {
+  .on("scroll", function () { // DEMANDER PROF SVP
     function moveHaijin() {
       perso
         .transition()
         .duration(500)
-        .ease(d3.easeLinear) // sert à faire une transition linéaire
-        .attr("transform", function () {
+        // .ease(d3.easeLinear) // sert à faire une transition linéaire
+        .attrTween("transform", function () {
           return d3.interpolateString(
             "translateY(0, -10px)",
             "translate(0, 0)"
@@ -236,7 +234,7 @@ const perso = svgHaijin
         })
         .transition()
         .duration(500)
-        .attr("transform", function () {
+        .attrTween("transform", function () {
           return d3.interpolateString(
             "translateY(0, 0px)",
             "translate(0, -10)"
