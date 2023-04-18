@@ -23,8 +23,10 @@ d3.csv("../data/haiku_karen.csv")
       explication: [],
     };
     data.forEach((haiku) => {
-      //affiche les nouveaux haiku
-      haikuListe.haikus.push([haiku.ligne01, haiku.ligne02, haiku.ligne03]);
+      //affiche les nouveaux haiku avec un retour à la ligne à chaque ligne
+      haikuListe.haikus.push(
+        [haiku.ligne01, haiku.ligne02, haiku.ligne03].join("<br>")
+      );
       haikuListe.haijin.push([haiku.title, haiku.source]);
       haikuListe.explication.push(haiku.explication);
     });
@@ -258,7 +260,7 @@ d3.select("#histoire")
       perso
         .transition()
         .duration(500)
-        // .ease(d3.easeLinear) // sert à faire une transition linéaire
+        .ease(d3.easeLinear) // sert à faire une transition linéaire
         .attrTween("transform", function () {
           return d3.interpolateString(
             "translateY(0, -10px)",
@@ -276,4 +278,8 @@ d3.select("#histoire")
         .on("end", moveHaijin);
     }
     moveHaijin();
+    // quand le scroll s'arrête, le haijin s'arrête aussi
+    // while (d3.select("#histoire").on("scroll") == false) {
+    //     perso.transition().duration(0);
+    //   };
   });

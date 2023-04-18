@@ -23,6 +23,8 @@ body {
     padding: 0;
     height: 100%;
     width: 100%;
+    font-family: 'ShipporiMincho';
+    font-size: normal;
 }
 
 body {
@@ -41,7 +43,7 @@ main {
 }
 
 #haikus {
-    width: 25%;
+    width: 20%;
     margin-left: 10%;
     margin-bottom: 2rem;
     padding: 8px 16px;
@@ -62,7 +64,6 @@ main {
     text-align: right;
     color: #fd40b1;
     word-wrap: normal;
-    font-family: 'ShipporiMincho';
     font-style: italic;
     font-weight: bold;
     font-size: 0.8rem;
