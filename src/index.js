@@ -238,6 +238,8 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   });
   // console.log(ramenJapon);
   // A afficher dans div #ramen
+  // => affiche 10 ramens aléatoires, avec nom et étoiles (trier par étoiles) puis quand on clique, description du produit 
+  // apparait en dessous (comme un style accordéon)
 
   const trieScore = ramenJapon.sort(function compare(a, b) {
     if (a.topTen < b.topTen) return 1;
@@ -250,36 +252,40 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   console.log({ DixPremiers });
 });
 
+
 //*** Haijin *******************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
 const perso = d3.select("#haijinPerso");
-d3.select("#histoire")
+const histoire = d3.select('#histoire'); // pour pouvoir récupérer la position du scroll
+// d3.select("#histoire")
+
+histoire.on("scroll", function () {
+  // vérifie si le scroll a atteint la fin de la div "histoire"
+  const scrollHeight = this.scrollHeight;
+  const scrollTop = this.scrollTop;
+  const offsetHeight = this.offsetHeight;
+
+  // Si on arrive à la fin de la div histoire
+  if (scrollTop + offsetHeight >= scrollHeight) {
+    return; // Arrêter l'animation
+  }
+
   // le haijin bouge seulement quand il y a du scroll
-  .on("scroll", function () { // DEMANDER PROF SVP
-    function moveHaijin() {
-      perso
-        .transition()
-        .duration(500)
-        .ease(d3.easeLinear) // sert à faire une transition linéaire
-        .attrTween("transform", function () {
-          return d3.interpolateString(
-            "translateY(0, -10px)",
-            "translate(0, 0)"
-          );
-        })
-        .transition()
-        .duration(500)
-        .attrTween("transform", function () {
-          return d3.interpolateString(
-            "translateY(0, 0px)",
-            "translate(0, -10)"
-          );
-        })
-        .on("end", moveHaijin);
-    }
-    moveHaijin();
-    // quand le scroll s'arrête, le haijin s'arrête aussi
-    // while (d3.select("#histoire").on("scroll") == false) {
-    //     perso.transition().duration(0);
-    //   };
-  });
+  function moveHaijin() {
+    perso
+      .transition()
+      .duration(500)
+      .ease(d3.easeLinear) // sert à faire une transition linéaire
+      .attrTween("transform", function () {
+        // Ajout de la translation dans la matrice de transformation existante (HTML)
+        return d3.interpolateString(
+          "matrix(0.6,0,0,0.6,0,-10)", // transformation initiale
+          "matrix(0.6,0,0,0.6,0,0)"    // transformation finale (sans la translation)
+        )
+      })
+      .on("end", moveHaijin);
+  }
+  moveHaijin();
+});
+
+// demander à la prof comment faire pour arrêter de bouger quand pas scroll sur div histoire
