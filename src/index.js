@@ -2,7 +2,7 @@
 import * as d3 from "d3";
 
 
-//*** menu burger **************************************************************************************/
+//*** menu burger ***********************************************************************************************************************/
 d3.select("#menu").on("click", function () {
   const menu = document.querySelector("#menuDeroulant").classList;
   if (menu.contains("active")) {
@@ -13,7 +13,7 @@ d3.select("#menu").on("click", function () {
 });
 
 
-//*** Haiku ********************************************************************************************/
+//*** Haiku ******************************************************************************************************************************/
 d3.csv("../data/haiku_karen.csv")
   .then(function (data) {
     // Code de la visualisation ()
@@ -27,7 +27,7 @@ d3.csv("../data/haiku_karen.csv")
       haikuListe.haikus.push(
         [haiku.ligne01, haiku.ligne02, haiku.ligne03].join("<br>")
       );
-      haikuListe.haijin.push([haiku.title, haiku.source]);
+      haikuListe.haijin.push([haiku.source]); //haiku.title, : enlevé car les haikus  n'ont pas de titre
       haikuListe.explication.push(haiku.explication);
     });
     // console.log(haikuListe);
@@ -54,7 +54,42 @@ d3.csv("../data/haiku_karen.csv")
   });
 
 
-//*** Sakura *******************************************************************************************/
+//*** Traduction Kanji ******************************************************************************************************************/
+d3.csv("../data/joyo_processed.csv")
+  .then(function (data) {
+    // Code de la visualisation ()
+    let kanjiListe = {
+      ecritJap: [],
+      traduction: [],
+    };
+    data.forEach((kanji) => {
+      //affiche les nouveaux kanji
+      kanjiListe.ecritJap.push(kanji.new);
+      kanjiListe.traduction.push(kanji.translation);
+    });
+
+    //créer un tableau vide pour stoquer des numéros aléatoires
+    const nombreRandom = [];
+    do {
+      //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
+      const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
+      //si le nombre n'est pas dans le tableau, on l'ajoute
+      if (!nombreRandom.includes(random)) {
+        nombreRandom.push(random);
+      }
+    } while (nombreRandom.length < 10);
+    // console.log(nombreRandom);
+    //Afficher les kanjis en fonction de nombrerandom
+    for (let i = 0; i < nombreRandom.length; i++) {
+      d3.select("#kanjiAleatoirs").append('p').html(kanjiListe.ecritJap[nombreRandom[i]] + " : " + kanjiListe.traduction[nombreRandom[i]]);
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
+//*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
 //coordonnées gps+ coordonnes japon + notre fichier
 //on importe tout d'un coup
@@ -86,13 +121,12 @@ d3.csv("../data/haiku_karen.csv")
   // console.log(villes.get("Tokyo"));
 
   //création un svg pour la carte du japon
-
-  const cadre = document.querySelector("#histoire");
+  const cadre = document.querySelector("#svgSakura");
   // console.dir(cadre);
   const hauteur = cadre.clientHeight;
   const largeur = cadre.clientWidth;
   const svg = d3
-    .select("#histoire")
+    .select("#svgSakura")
     .append("svg")
     .attr("height", hauteur)
     .attr("width", largeur);
@@ -188,42 +222,7 @@ d3.csv("../data/haiku_karen.csv")
 })();
 
 
-//*** Traduction Kanji *********************************************************************************/
-d3.csv("../data/joyo_processed.csv")
-  .then(function (data) {
-    // Code de la visualisation ()
-    let kanjiListe = {
-      ecritJap: [],
-      traduction: [],
-    };
-    data.forEach((kanji) => {
-      //affiche les nouveaux kanji
-      kanjiListe.ecritJap.push(kanji.new);
-      kanjiListe.traduction.push(kanji.translation);
-    });
-
-    //créer un tableau vide pour stoquer des numéros aléatoires
-    const nombreRandom = [];
-    do {
-      //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
-      const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
-      //si le nombre n'est pas dans le tableau, on l'ajoute
-      if (!nombreRandom.includes(random)) {
-        nombreRandom.push(random);
-      }
-    } while (nombreRandom.length < 10);
-    // console.log(nombreRandom);
-    //Afficher les kanjis en fonction de nombrerandom
-    for (let i = 0; i < nombreRandom.length; i++) {
-      d3.select("#kanjis").append('p').html(kanjiListe.ecritJap[nombreRandom[i]] + " : " + kanjiListe.traduction[nombreRandom[i]]);
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-
-
-//*** Ramen ********************************************************************************************/
+//*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
 d3.csv("../data/ramen-ratings.csv").then(function (data) {
   let ramenJapon = [];
 
@@ -269,12 +268,12 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   // d3.select("#ramen").append('p').html(triScore.topFive + " " + triScore.marque)
 
   // 4) afficher la marque et le topFive dans l'HTML
-  const affichageRamen = d3.select("#ramen");
+  const affichageRamen = d3.select("#ramensAleatoirs");
   affichageRamen.selectAll("p")
     .data(triScore)
     .enter()
     .append("p")
-    .html((d) => d.marque + " - " + d.topFive);
+    .html((d) => d.marque + "  " + d.topFive);
 
   // 5) quand on clique sur un ramen, pour afficher / cacher la description en dessous du produit
 
@@ -288,16 +287,14 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
 
 
 
-//*** Haijin *******************************************************************************************/
+//*** Haijin ***************************************************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
 const perso = d3.select("#haijinPerso");
 const histoire = d3.select('#histoire'); // pour pouvoir récupérer la position du scroll
 
 histoire.on("scroll", function () {
   // vérifie si le scroll a atteint la fin de la div "histoire"
-  const scrollHeight = this.scrollHeight;
   const scrollTop = this.scrollTop;
-  const offsetHeight = this.offsetHeight;
 
   // le haijin bouge seulement quand il y a du scroll
   function moveHaijin() {
@@ -312,9 +309,6 @@ histoire.on("scroll", function () {
           "matrix(0.6,0,0,0.6,0,0)"    // transformation finale (sans la translation)
         )
       })
-
-      // créer une fonction pour arrêter le mouvement haijin
-
       .on("end", stopHaijin); // appeller fonction stop quand fini
   }
   //créer une fonction pour arrêter le mouvement haijin quand pas scroll

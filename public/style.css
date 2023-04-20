@@ -17,6 +17,7 @@
     font-style: normal, italic;
 }
 
+
 html,
 body {
     margin: 0;
@@ -42,6 +43,8 @@ main {
     margin-top: 10rem;
 }
 
+
+/* Pour les données sur les haikus **************************/
 #haikus {
     width: 20%;
     margin-left: 10%;
@@ -101,6 +104,8 @@ main {
     flex-direction: row;
 }
 
+
+/* Pour les données du menu déroulant ************************/
 #menuImg {
     cursor: pointer;
 }
@@ -148,6 +153,7 @@ li a:hover {
     transition: transform 0.4s ease-in-out;
 }
 
+
 #histoire {
     background-color: #f0f0f0c8;
     width: 75%;
@@ -157,15 +163,77 @@ li a:hover {
     padding: 16px;
 }
 
+
+/*Pour les données sur les kanjis ***************************/
+#kanjis {
+    display: block;
+}
+
+#kanjiAleatoirs {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: space-around;
+    width: 60%;
+    height: auto;
+    margin-left: 20%;
+    margin-right: 20%;
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+
+#kanjiAleatoirs>p {
+    margin: 0;
+}
+
+
+/*Pour les données sur les floraisons sakura *****************/
+#sakura {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+#datesEvolution {
+    width: 10%;
+}
+
+#svgSakura {
+    width: 90%;
+    height: 420px;
+}
+
 .hidden {
     display: none;
-  }
+}
 
+
+/*Pour les données sur les ramens ***************************/
+#ramen {
+    width: 100%;
+}
+
+#ramensAleatoirs {
+    display: flex;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#ramensAleatoirs>p {
+    width: 20%;
+    margin: 0;
+    text-align: center;
+}
+
+
+/*Pour les données du haikin ********************************/
 #haijin {
     width: 10%;
     align-items: end;
     display: flex;
 }
+
 
 footer {
     width: 100%;
