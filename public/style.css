@@ -157,6 +157,10 @@ li a:hover {
     padding: 16px;
 }
 
+.hidden {
+    display: none;
+  }
+
 #haijin {
     width: 10%;
     align-items: end;

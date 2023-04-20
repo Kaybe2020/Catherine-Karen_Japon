@@ -59,6 +59,7 @@ d3.csv("../data/haiku_karen.csv")
 //coordonnées gps+ coordonnes japon + notre fichier
 //on importe tout d'un coup
 //fn qui s'appelle elle même
+//METTRE TRANSITION PAR RAYON ("fiouu")
 
 (async () => {
   const stockageFichiers = await Promise.all([
@@ -227,48 +228,76 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   let ramenJapon = [];
 
   data.forEach((ramen) => {
-    // trier les informations et ne prendre que les ramens du Japon
+    // 1) trier les informations et ne prendre que les ramens du Japon
     if (ramen.Country == "Japan")
       // prendre nom, description et étoiles des ramens
       ramenJapon.push({
-        nom: ramen.Brand,
+        marque: ramen.Brand,
         description: ramen.Variety,
-        topTen: ramen.Stars,
+        topFive: ramen.Stars,
       });
   });
   // console.log(ramenJapon);
-  // A afficher dans div #ramen
-  // => affiche 10 ramens aléatoires, avec nom et étoiles (trier par étoiles) puis quand on clique, description du produit 
-  // apparait en dessous (comme un style accordéon)
 
-  const trieScore = ramenJapon.sort(function compare(a, b) {
-    if (a.topTen < b.topTen) return 1;
-    if (a.topTen > b.topTen) return -1;
+  // 2) dans ces ramens japonais, prendre 5 ramens aléatoires
+  //créer un tableau vide pour stoquer des numéros aléatoires
+  const nombreRandomRamen = [];
+  do {
+    //constante aléatoire 
+    const randomRamen = Math.floor(Math.random() * ramenJapon.length);
+    //si le nombre n'est pas dans le tableau, on l'ajoute
+    if (!nombreRandomRamen.includes(randomRamen)) {
+      nombreRandomRamen.push(randomRamen);
+    }
+  } while (nombreRandomRamen.length < 5);
+  console.log(nombreRandomRamen);
+  // constante qui stoque les 5 plats
+  const cinqRamens = [];
+  //Afficher les ramens en fonction de nombrerandom
+  for (let i = 0; i < nombreRandomRamen.length; i++) {
+    cinqRamens.push(ramenJapon[nombreRandomRamen[i]]);
+  }
+  console.log(cinqRamens)
+
+  // 3) trier ces 5 ramens par étoiles
+  const triScore = cinqRamens.sort(function compare(a, b) {
+    if (a.topFive < b.topFive) return 1;
+    if (a.topFive > b.topFive) return -1;
     return 0;
   });
-  //console.log({ trieScore });
+  console.log({ triScore });
+  // d3.select("#ramen").append('p').html(triScore.topFive + " " + triScore.marque)
 
-  const DixPremiers = trieScore.slice(0, 10);
-  console.log({ DixPremiers });
+  // 4) afficher la marque et le topFive dans l'HTML
+  const affichageRamen = d3.select("#ramen");
+  affichageRamen.selectAll("p")
+    .data(triScore)
+    .enter()
+    .append("p")
+    .html((d) => d.marque + " - " + d.topFive);
+
+  // 5) quand on clique sur un ramen, pour afficher / cacher la description en dessous du produit
+
+
+
+
+
+
+
 });
+
 
 
 //*** Haijin *******************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
 const perso = d3.select("#haijinPerso");
 const histoire = d3.select('#histoire'); // pour pouvoir récupérer la position du scroll
-// d3.select("#histoire")
 
 histoire.on("scroll", function () {
   // vérifie si le scroll a atteint la fin de la div "histoire"
   const scrollHeight = this.scrollHeight;
   const scrollTop = this.scrollTop;
   const offsetHeight = this.offsetHeight;
-
-  // Si on arrive à la fin de la div histoire
-  if (scrollTop + offsetHeight >= scrollHeight) {
-    return; // Arrêter l'animation
-  }
 
   // le haijin bouge seulement quand il y a du scroll
   function moveHaijin() {
@@ -283,9 +312,31 @@ histoire.on("scroll", function () {
           "matrix(0.6,0,0,0.6,0,0)"    // transformation finale (sans la translation)
         )
       })
-      .on("end", moveHaijin);
-  }
-  moveHaijin();
-});
 
-// demander à la prof comment faire pour arrêter de bouger quand pas scroll sur div histoire
+      // créer une fonction pour arrêter le mouvement haijin
+
+      .on("end", stopHaijin); // appeller fonction stop quand fini
+  }
+  //créer une fonction pour arrêter le mouvement haijin quand pas scroll
+  function stopHaijin() {
+    perso
+      .transition()
+      .duration(500)
+      .ease(d3.easeLinear) // sert à faire une transition linéaire
+      .attrTween("transform", function () {
+        // Ajout de la translation dans la matrice de transformation existante (HTML)
+        return d3.interpolateString(
+          "matrix(0.6,0,0,0.6,0,0)", // transformation initiale
+          "matrix(0.6,0,0,0.6,0,0)"    // transformation finale (sans la translation)
+        )
+      })
+  }
+
+  // Si il y a un scroll, on appelle la fonction moveHaijin sinon on appelle la fonction stopHaijin
+  if (scrollTop > 0) {
+    moveHaijin();
+  } else {
+    stopHaijin();
+  }
+
+});
