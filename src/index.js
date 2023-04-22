@@ -12,8 +12,24 @@ d3.select("#menu").on("click", function () {
   }
 });
 
+//quand il y a un mouseover, l'image #menuImg change de taille
+const rond = document.querySelector('menuImg');
+d3.select('#menuImg').on("mouseover", function () {
+  rond.size("80%")
+});
+//image reprend sa taille normale quand mouseout
+d3.select("#menuImg").on("mouseout", function () {
+  rond.size("normal");
+});
+//quand on clic sur l'image, la taille devient plus petite
+d3.select("#menuImg").on("click", function () {
+  rond.size("20%")
+})
+
 
 //*** Haiku ******************************************************************************************************************************/
+// METTRE AFFICHAGE ALEATOIRES CHANGEANT(change tous les X temps) + BOUTON PLAY?
+
 d3.csv("../data/haiku_karen.csv")
   .then(function (data) {
     // Code de la visualisation ()
@@ -54,47 +70,19 @@ d3.csv("../data/haiku_karen.csv")
   });
 
 
-//*** Traduction Kanji ******************************************************************************************************************/
-d3.csv("../data/joyo_processed.csv")
-  .then(function (data) {
-    // Code de la visualisation ()
-    let kanjiListe = {
-      ecritJap: [],
-      traduction: [],
-    };
-    data.forEach((kanji) => {
-      //affiche les nouveaux kanji
-      kanjiListe.ecritJap.push(kanji.new);
-      kanjiListe.traduction.push(kanji.translation);
-    });
-
-    //créer un tableau vide pour stoquer des numéros aléatoires
-    const nombreRandom = [];
-    do {
-      //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
-      const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
-      //si le nombre n'est pas dans le tableau, on l'ajoute
-      if (!nombreRandom.includes(random)) {
-        nombreRandom.push(random);
-      }
-    } while (nombreRandom.length < 10);
-    // console.log(nombreRandom);
-    //Afficher les kanjis en fonction de nombrerandom
-    for (let i = 0; i < nombreRandom.length; i++) {
-      d3.select("#kanjiAleatoirs").append('p').html(kanjiListe.ecritJap[nombreRandom[i]] + " : " + kanjiListe.traduction[nombreRandom[i]]);
-    }
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-
-
 //*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
 //coordonnées gps+ coordonnes japon + notre fichier
 //on importe tout d'un coup
 //fn qui s'appelle elle même
+
 //METTRE TRANSITION PAR RAYON ("fiouu")
+//RAJOUTER LE MOIS AU DEFILEMENT AUTOMATIQUE
+// DEFILE PAR ANNEE - MOIS - JOUR (si pas jour partir du principe que c'est le 1er - LES SAKURAS FLEURISSENT PENDANT 4 MOIS ENVIRON)
+// METTRE UN BOUTON STOP/PLAY POUR POUVOIR ARRÊTER SUR UNE ANNEE
+// QUAND LA SOURIS CLIC SUR POINT AFFICHE LE NOM DU LIEU ET LA DATE PRECISE DE FLORAISON
+// DONNER UN TITRE AU GRAPHIQUE : FLoraison des cerisiers au Japon (de... à ...)
+// METTRE UNE LEGENDE AU GRAPHIQUE : (pas d idée dsl ^^') 
 
 (async () => {
   const stockageFichiers = await Promise.all([
@@ -220,6 +208,41 @@ d3.csv("../data/joyo_processed.csv")
 
   setInterval(afficherAnnees, 500);
 })();
+
+
+//*** Traduction Kanji ******************************************************************************************************************/
+d3.csv("../data/joyo_processed.csv")
+  .then(function (data) {
+    // Code de la visualisation ()
+    let kanjiListe = {
+      ecritJap: [],
+      traduction: [],
+    };
+    data.forEach((kanji) => {
+      //affiche les nouveaux kanji
+      kanjiListe.ecritJap.push(kanji.new);
+      kanjiListe.traduction.push(kanji.translation);
+    });
+
+    //créer un tableau vide pour stoquer des numéros aléatoires
+    const nombreRandom = [];
+    do {
+      //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
+      const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
+      //si le nombre n'est pas dans le tableau, on l'ajoute
+      if (!nombreRandom.includes(random)) {
+        nombreRandom.push(random);
+      }
+    } while (nombreRandom.length < 10);
+    // console.log(nombreRandom);
+    //Afficher les kanjis en fonction de nombrerandom
+    for (let i = 0; i < nombreRandom.length; i++) {
+      d3.select("#kanjiAleatoirs").append('p').html(kanjiListe.ecritJap[nombreRandom[i]] + " : " + kanjiListe.traduction[nombreRandom[i]]);
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 
 
 //*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
