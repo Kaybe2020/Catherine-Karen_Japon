@@ -37,6 +37,14 @@ body {
 
 }
 
+#toolType{
+    background-color:antiquewhite;
+    position:absolute;
+    padding:1rem;
+border:1px solid black;
+display:none;
+
+}
 
 main {
     /* display: inline-flex;
