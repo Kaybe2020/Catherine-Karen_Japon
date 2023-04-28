@@ -302,8 +302,8 @@ d3.csv("../data/joyo_processed.csv")
         .append("p")
         .html(
           kanjiListe.ecritJap[nombreRandom[i]] +
-            " : " +
-            kanjiListe.traduction[nombreRandom[i]]
+          " : " +
+          kanjiListe.traduction[nombreRandom[i]]
         );
     }
   })
@@ -356,16 +356,38 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   console.log({ triScore });
   // d3.select("#ramen").append('p').html(triScore.topFive + " " + triScore.marque)
 
-  // 4) afficher la marque et le topFive dans l'HTML
-  const affichageRamen = d3.select("#ramensAleatoirs");
-  affichageRamen
-    .selectAll("p")
-    .data(triScore)
-    .enter()
-    .append("p")
-    .html((d) => d.marque + "  " + d.topFive);
+  // // 4) afficher la marque et le topFive dans l'HTML
+  // const affichageRamen = d3.select("#ramensAleatoirs");
+  // affichageRamen
+  //   .selectAll("p")
+  //   .data(triScore)
+  //   .enter()
+  //   .append("p")
+  //   .html((d) => d.marque + "  " + d.topFive);
 
   // 5) quand on clique sur un ramen, pour afficher / cacher la description en dessous du produit
+  const affichageDescription = d3.select("#ramensAleatoirs")
+    .selectAll("div")
+    .data(triScore)
+    .enter()
+    .append("div")
+    .classed("ramen-item", true);
+
+  affichageDescription.append("p")
+    .html((d) => d.marque + " " + d.topFive);
+
+  affichageDescription.append("p")
+    .classed("description", true)
+    .html((d) => d.description)
+    .style("display", "none");
+
+  affichageDescription.on("click", function () {
+    d3.select(this)
+      .select(".description")
+      .style("display", function () {
+        return this.style.display === "none" ? "block" : "none";
+      });
+  });
 });
 
 //*** Haijin ***************************************************************************************************************************/
@@ -414,3 +436,15 @@ histoire.on("scroll", function () {
     stopHaijin();
   }
 });
+
+
+// A FAIRE :
+// - Résoudre problème carte (MATHILDE)
+// - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
+// - Ajouter Haijin dans l'encadré de la carte (mouseOver) (MATHILDE) = croisement de données
+// - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
+// - faire CSS afficher les ramens (KAREN)
+// - Bouton menu changer couleur en over (KAREN)
+// - Ecrire conclusion (MATHILDE + KAREN)
+// - Mise en page final CSS (MATHILDE + KAREN)
+// - Faire les 2 autres media queries (MATHILDE + KAREN)

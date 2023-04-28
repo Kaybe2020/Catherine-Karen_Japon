@@ -206,8 +206,9 @@ li a:hover {
 /*Pour les données sur les floraisons sakura *****************/
 #sakura {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
+    flex-direction: column; /* Affiche les éléments en colonne */
+    justify-content: center; /* Centre verticalement les éléments */
+    align-items: center; /* Centre horizontalement les éléments */
 }
 
 #datesEvolution {
@@ -219,6 +220,12 @@ li a:hover {
     height: 420px;
 }
 
+.explication {
+    display: flex; /* Utilise le modèle d'affichage flexbox */
+    align-items: center; /* Centre verticalement les éléments */
+}
+
+/* pour données affichées sur carte */
 .hidden {
     display: none;
 }
