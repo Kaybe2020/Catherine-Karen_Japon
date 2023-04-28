@@ -11,19 +11,19 @@ d3.select("#menu").on("click", function () {
   }
 });
 
-//quand il y a un mouseover, l'image #menuImg change de taille
-const rond = document.querySelector("menuImg");
-d3.select("#menuImg").on("mouseover", function () {
-  rond.size("80%");
+//Change la couleur du menu burger quand mouseover
+const menuImg = document.getElementById("menuImg");
+
+menuImg.addEventListener("mouseover", function () {
+  this.style.transition = "background-image 0.5s";
+  this.src = "../img/menuV1-hover.png";
 });
-//image reprend sa taille normale quand mouseout
-d3.select("#menuImg").on("mouseout", function () {
-  rond.size("normal");
+
+menuImg.addEventListener("mouseout", function () {
+  this.style.transition = "background-image 0.5s";
+  this.src = "../img/menuV1.png";
 });
-//quand on clic sur l'image, la taille devient plus petite
-d3.select("#menuImg").on("click", function () {
-  rond.size("20%");
-});
+
 
 //*** Haiku ******************************************************************************************************************************/
 d3.csv("../data/haiku_karen.csv").then(function (data) {
@@ -286,6 +286,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   setInterval(afficherDate, 500);
 })();
 
+
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed.csv")
   .then(function (data) {
@@ -300,28 +301,42 @@ d3.csv("../data/joyo_processed.csv")
       kanjiListe.traduction.push(kanji.translation);
     });
 
-    //créer un tableau vide pour stoquer des numéros aléatoires
-    const nombreRandom = [];
-    do {
-      //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
-      const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
-      //si le nombre n'est pas dans le tableau, on l'ajoute
-      if (!nombreRandom.includes(random)) {
-        nombreRandom.push(random);
+    //Fonction pour afficher les kanjis aléatoires
+    function afficherKanjiAleatoirs() {
+      // Effacer les kanjis affichés précédemment
+      d3.select("#kanjiAleatoirs").selectAll("p").remove();
+      //créer un tableau vide pour stoquer des numéros aléatoires
+      const nombreRandom = [];
+      do {
+        //constante aléatoire pour avoir le même nombre entre ecritJap /traduction (mettre après avoir rempli les tableaux!)
+        const random = Math.floor(Math.random() * kanjiListe.ecritJap.length);
+        //si le nombre n'est pas dans le tableau, on l'ajoute
+        if (!nombreRandom.includes(random)) {
+          nombreRandom.push(random);
+        }
+      } while (nombreRandom.length < 10);
+      // console.log(nombreRandom);
+      //Afficher les kanjis en fonction de nombrerandom
+      for (let i = 0; i < nombreRandom.length; i++) {
+        d3.select("#kanjiAleatoirs")
+          .append("p")
+          .html(
+            kanjiListe.ecritJap[nombreRandom[i]] +
+            " : " +
+            kanjiListe.traduction[nombreRandom[i]]
+          );
       }
-    } while (nombreRandom.length < 10);
-    // console.log(nombreRandom);
-    //Afficher les kanjis en fonction de nombrerandom
-    for (let i = 0; i < nombreRandom.length; i++) {
-      d3.select("#kanjiAleatoirs")
-        .append("p")
-        .html(
-          kanjiListe.ecritJap[nombreRandom[i]] +
-          " : " +
-          kanjiListe.traduction[nombreRandom[i]]
-        );
     }
+
+    //Appel initial de la fonction pour afficher les kanjis
+    afficherKanjiAleatoirs();
+
+    //Lier l'événement click au bouton #buttonKanjisChange
+    d3.select("#buttonKanjisChange").on("click", function () {
+      afficherKanjiAleatoirs();
+    });
   })
+
   .catch(function (error) {
     console.log(error);
   });
@@ -370,34 +385,33 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
     return 0;
   });
   // console.log({ triScore });
-  // d3.select("#ramen").append('p').html(triScore.topFive + " " + triScore.marque)
 
   // // 4) afficher la marque et le topFive dans l'HTML
-  // const affichageRamen = d3.select("#ramensAleatoirs");
-  // affichageRamen
-  //   .selectAll("p")
-  //   .data(triScore)
-  //   .enter()
-  //   .append("p")
-  //   .html((d) => d.marque + "  " + d.topFive);
-
-  // 5) quand on clique sur un ramen, afficher / cacher la description en dessous du produit
-  const affichageDescription = d3.select("#ramensAleatoirs")
+  const affichageRamen = d3.select("#ramensAleatoirs")
     .selectAll("div")
     .data(triScore)
     .enter()
     .append("div")
-    .classed("ramen-item", true);
+    .classed("ramen-item", true) // ajouter une classe ramen-item
 
-  affichageDescription.append("p")
-    .html((d) => d.marque + " " + d.topFive);
+  // 5) quand on clique sur un ramen, afficher / cacher la description en dessous du produit
+  affichageRamen.append("p")
+    .html((d) => d.marque + " " + d.topFive)
+    //ajouter une image avant topFive
+    .append("img")
+    .attr("src", "../img/etoile.svg")
+    .attr("alt", "etoile")
+    .classed("etoileRamen", true)
+    //ajouter le topFive après l'image
+    .append("span")
+    .html((d) => d.topFive); // fonctionne paaaas TT_TT
 
-  affichageDescription.append("p")
+  affichageRamen.append("p")
     .classed("description", true)
     .html((d) => d.description)
     .style("display", "none");
 
-  affichageDescription.on("click", function () {
+  affichageRamen.on("click", function () {
     d3.select(this)
       .select(".description")
       .style("display", function () {
@@ -405,6 +419,7 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
       });
   });
 });
+
 
 //*** Haijin ***************************************************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
@@ -459,8 +474,8 @@ histoire.on("scroll", function () {
 // OK - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
 // - Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE) = croisement de données
 // OK - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
-// - faire CSS afficher les ramens (KAREN)
-// - Bouton menu changer couleur en over (KAREN)
+// EN COURS - faire CSS afficher les ramens (KAREN)
+// OK - Bouton menu changer couleur en over (KAREN)
 // - Ecrire conclusion (MATHILDE + KAREN)
-// - Mise en page final CSS (MATHILDE + KAREN)
+// EN COURS - Mise en page final CSS (MATHILDE + KAREN)
 // - Faire les 2 autres media queries (MATHILDE + KAREN)
