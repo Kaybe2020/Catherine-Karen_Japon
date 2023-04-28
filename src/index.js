@@ -26,8 +26,6 @@ d3.select("#menuImg").on("click", function () {
 });
 
 //*** Haiku ******************************************************************************************************************************/
-// METTRE AFFICHAGE ALEATOIRES CHANGEANT(change tous les X temps) + BOUTON PLAY?
-
 d3.csv("../data/haiku_karen.csv").then(function (data) {
   // Code de la visualisation ()
   let haikuListe = {
@@ -35,6 +33,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     haijin: [],
     explication: [],
   };
+
   data.forEach((haiku) => {
     //affiche les nouveaux haiku avec un retour à la ligne à chaque ligne
     haikuListe.haikus.push(
@@ -45,26 +44,42 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   });
   // console.log(haikuListe);
 
-  //création d'un nombre random pour afficher le haiku et l'auteur en random
-  const randomHaiku = Math.floor(Math.random() * haikuListe.haikus.length);
-  //affiche le haiku et l'auteur
-  d3.select("#haiku").html(haikuListe.haikus[randomHaiku]);
-  d3.select("#titleAuthor").html(haikuListe.haijin[randomHaiku]);
+  // Fonction pour afficher un haiku aléatoire
+  function afficherHaikuAleatoire() {
+    //création d'un nombre random pour afficher le haiku et l'auteur en random
+    const randomHaiku = Math.floor(Math.random() * haikuListe.haikus.length);
+    //affiche le haiku et l'auteur
+    d3.select("#haiku").html(haikuListe.haikus[randomHaiku]);
+    d3.select("#titleAuthor").html(haikuListe.haijin[randomHaiku]);
 
-  //affiche la source du haiku dans un overlay quand on passe la souris sur la div #haikus
-  d3.select("#haikus").on("mouseover", function () {
-    //affiche l'overlay
-    d3.select("#overlay").style("display", "block");
-    // met l'overlay devant les autres éléments
-    d3.select("#overlay").style("z-index", "100");
-    //affiche la source du haiku
+    //affiche la source du haiku dans un overlay quand on passe la souris sur la div #haikus
+    d3.select("#haikus").on("mouseover", function () {
+      //affiche l'overlay
+      d3.select("#overlay").style("display", "block");
+      // met l'overlay devant les autres éléments
+      d3.select("#overlay").style("z-index", "100");
+      //affiche la source du haiku
+      d3.select("#popup").html(haikuListe.explication[randomHaiku]);
+    });
+    // Mettre à jour la source de l'overlay (quand on clic sur le bouton)
     d3.select("#popup").html(haikuListe.explication[randomHaiku]);
+    //cache l'overlay quand on sort de la div haikus
+    d3.select("#haikus").on("mouseout", function () {
+      d3.select("#overlay").style("display", "none");
+    });
+  }
+
+  // Appel initial pour afficher un haiku aléatoire
+  afficherHaikuAleatoire();
+
+  // Lier l'événement clic au bouton #buttonHaikuChange
+  d3.select("#buttonHaikuChange").on("click", function () {
+    afficherHaikuAleatoire();
   });
-  //cache l'overlay quand on sort de la div haikus
-  d3.select("#haikus").on("mouseout", function () {
-    d3.select("#overlay").style("display", "none");
-  });
+
+  //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
+
 
 //*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
@@ -311,6 +326,7 @@ d3.csv("../data/joyo_processed.csv")
     console.log(error);
   });
 
+
 //*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
 d3.csv("../data/ramen-ratings.csv").then(function (data) {
   let ramenJapon = [];
@@ -338,14 +354,14 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
       nombreRandomRamen.push(randomRamen);
     }
   } while (nombreRandomRamen.length < 5);
-  console.log(nombreRandomRamen);
+  // console.log(nombreRandomRamen);
   // constante qui stoque les 5 plats
   const cinqRamens = [];
   //Afficher les ramens en fonction de nombrerandom
   for (let i = 0; i < nombreRandomRamen.length; i++) {
     cinqRamens.push(ramenJapon[nombreRandomRamen[i]]);
   }
-  console.log(cinqRamens);
+  // console.log(cinqRamens);
 
   // 3) trier ces 5 ramens par étoiles
   const triScore = cinqRamens.sort(function compare(a, b) {
@@ -353,7 +369,7 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
     if (a.topFive > b.topFive) return -1;
     return 0;
   });
-  console.log({ triScore });
+  // console.log({ triScore });
   // d3.select("#ramen").append('p').html(triScore.topFive + " " + triScore.marque)
 
   // // 4) afficher la marque et le topFive dans l'HTML
@@ -365,7 +381,7 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   //   .append("p")
   //   .html((d) => d.marque + "  " + d.topFive);
 
-  // 5) quand on clique sur un ramen, pour afficher / cacher la description en dessous du produit
+  // 5) quand on clique sur un ramen, afficher / cacher la description en dessous du produit
   const affichageDescription = d3.select("#ramensAleatoirs")
     .selectAll("div")
     .data(triScore)
@@ -440,9 +456,9 @@ histoire.on("scroll", function () {
 
 // A FAIRE :
 // - Résoudre problème carte (MATHILDE)
-// - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
-// - Ajouter Haijin dans l'encadré de la carte (mouseOver) (MATHILDE) = croisement de données
-// - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
+// OK - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
+// - Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE) = croisement de données
+// OK - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
 // - faire CSS afficher les ramens (KAREN)
 // - Bouton menu changer couleur en over (KAREN)
 // - Ecrire conclusion (MATHILDE + KAREN)

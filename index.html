@@ -23,7 +23,14 @@
     <main>
         <div id="haikus">
             <p id="haiku"></p>
-            <p id="titleAuthor"></p>
+            <div id="alignementInfoHaiku">
+                <!-- affiche bouton aléatoire depuis site lordicon-->
+                <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
+                <lord-icon src="https://cdn.lordicon.com/akuwjdzh.json" trigger="hover" colors="primary:#f823a3"
+                    id="buttonHaikuChange" alt="bouton aléatoire pour changer les haikus et ses informations.">
+                </lord-icon>
+                <p id="titleAuthor"></p>
+            </div>
         </div>
 
         <!-- Pour l'overlay de la source des haikus -->
@@ -52,8 +59,11 @@
 
             <div id="histoire">
 
-                <p id ="introduction" class="HaijinStory">
-                    Let me introduce myself, my name is Kobayashi Issa. I live in the Edo era (1603 - 1868) in Kyoto.
+                <p id="introduction" class="HaijinStory">
+                    こんにちは,<br>
+                    It means hello in Japanese. Let me introduce myself, I'm the little guy on the right of your screen!
+                    <br>
+                    My name is Kobayashi Issa. I live in the Edo era (1603 - 1868) in Kyoto.
                     Since I was a child, I have had a passion for writing and books. Being born in a modest family, I
                     had to start working very early. One day, in the year of my twentieth birthday, I decided to talk to
                     my father and left home to start my life as a haijin.
@@ -61,7 +71,7 @@
                     through short poems.
                     Follow me as I explain one of my typical days!
                 </p>
-                <div class="HaikuExplication">
+                <div id="HaikuExplication">
                     <p>What is a haiku?<br>
                         A haiku does not just describe things, it requires the author's detachment. It usually expresses
                         a feeling. It is a kind of snapshot. It expresses an emotion, a fleeting feeling, the haiku
@@ -79,8 +89,9 @@
                         All things<br>
                         Beautifies (Chiyo-ni)<br>
                         It must have a caesura and 17 mores (syllables)
-                        divided into three parts 5-7-5: ha-tsu shi-gu-re (5) => The first rain
-                        sa-ru mo ko-mi-no wo (7) => The monkey also wants
+                        divided into three parts 5-7-5 :<br>
+                        ha-tsu shi-gu-re (5) => The first rain <br>
+                        sa-ru mo ko-mi-no wo (7) => The monkey also wants <br>
                         ho-shi-ge na-ri (5) => A little coat.
                     </p>
                 </div>
@@ -135,7 +146,15 @@
                 </p>
 
                 <div id="kanjis">
-                    <div id="kanjiAleatoirs"> </div>
+                    <div id="AlignementKanji">
+                        <div id="kanjiAleatoirs"></div>
+                        <!-- affiche bouton aléatoire depuis site lordicon-->
+                        <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
+                        <lord-icon src="https://cdn.lordicon.com/akuwjdzh.json" trigger="hover" colors="primary:#5fa7d7"
+                            id="buttonKanjisChange"
+                            alt="Bouton qui permet de faire changer les kanjis de manière aléatoire.">
+                        </lord-icon>
+                    </div>
                     <p class="explication">
                         What is a kanji?<br>
                         Kanjisa (漢字) are signs derived from Chinese characters whose role is to write a part of the
