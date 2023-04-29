@@ -24,7 +24,6 @@ menuImg.addEventListener("mouseout", function () {
   this.src = "../img/menuV1.png";
 });
 
-
 //*** Haiku ******************************************************************************************************************************/
 d3.csv("../data/haiku_karen.csv").then(function (data) {
   // Code de la visualisation ()
@@ -79,7 +78,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
   //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
-
 
 //*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
@@ -161,7 +159,8 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     }
   });
   // console.log(donnesFinales);
-  const donneeParMois = {};
+  const donneeParMoisJour = {};
+  //console.log(donnesFinales);
   donnesFinales.forEach((ville) => {
     //console.log(ville);
     //pour afficher propriétés de ville
@@ -171,21 +170,25 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       // on voit qu'il y a 6 strings et cela nous permet de garder que les années
       //console.log(Number(propriete));
       if (!isNaN(Number(propriete))) {
-        //on décompose date en 3 partie
-        const dateParts = ville[propriete].split("-");
-        const date = `${dateParts[0]}-${dateParts[1]}`;
-        const isArray = donneeParMois[date] ? true : false;
+        //console.log(propriete);
+        //  console.log(ville[propriete]);
+        //on décompose date en 3 partie, car on voulait des clés
+        // const dateParts = ville[propriete].split("-");
+        //const date = `${dateParts[0]}-${dateParts[1]}`;
+        const date = ville[propriete];
+        //car quand on est à la première fois, y a pas de tableau
+        const isArray = donneeParMoisJour[date] ? true : false;
         const data = {
           siteName: ville["Site Name"],
           latitude: ville.latitude,
           longitude: ville.longitude,
-          date: ville[propriete],
+          // date: ville[propriete],
         };
         if (isArray) {
-          donneeParMois[date].push(data);
+          donneeParMoisJour[date].push(data);
         } else {
-          donneeParMois[date] = [];
-          donneeParMois[date].push(data);
+          donneeParMoisJour[date] = [];
+          donneeParMoisJour[date].push(data);
         }
 
         //console.log(ville[propriete]);
@@ -193,23 +196,62 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     });
     //console.log(Object.keys(ville));
   });
-  console.log(donneeParMois);
+  console.log(donneeParMoisJour);
+  const slider = document.querySelector("#sliderid");
+  const playButton = document.querySelector("#playButton");
   const toolType = document.querySelector("#toolType");
 
-  const afficheToolType = (e) => {
+  slider.setAttribute("max", getDaysBetweenDates("1953-03-31", "2020-05-12"));
+  slider.setAttribute("min", "1");
+  afficher(donneeParMoisJour["1953-03-31"]);
+
+  //id est nécessaire pour cancel intervalle
+  let stockageIdIntervalle;
+
+  playButton.addEventListener("click", (e) => {
+    playButton.classList.toggle("pause");
+    const isPaused = playButton.classList[0];
+    //console.log(pause);
+
+    if (isPaused) {
+      playButton.innerText = "Pause";
+      pause();
+    } else {
+      playButton.innerText = "Play";
+      play();
+    }
+  });
+
+  function play() {
+    stockageIdIntervalle = setInterval(afficherDate, 1000);
+  }
+
+  function pause() {
+    clearInterval(stockageIdIntervalle);
+  }
+
+  function getDaysBetweenDates(startDate, endDate) {
+    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffDays = Math.round(Math.abs((start - end) / oneDay));
+    return diffDays;
+  }
+
+  function afficheToolType(e) {
     toolType.style.display = "block";
     toolType.style.top = e.clientY + 20 + "px";
     toolType.style.left = e.clientX + "px";
     console.log(e);
-    toolType.innerText = e.target.__data__["Site Name"];
+    toolType.innerText = e.target.__data__["siteName"];
 
     //console.log(e.clientY);
-  };
-  const cacherToolType = (e) => {
+  }
+  function cacherToolType(e) {
     toolType.style.display = "none";
-  };
+  }
 
-  const estEclo = (data, year, month) => {
+  /*const estEclo = (data, year, month) => {
     const dateParts = data[year].split("-");
     const dateUn = `${dateParts[0]}-${dateParts[1]}`;
     const dateDeux = `${year}-${month}`;
@@ -217,9 +259,9 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       return true;
     }
     return false;
-  };
+  };*/
 
-  const afficher = (data, year, month) => {
+  function afficher(data) {
     svg
       .selectAll("circle")
       .data(data)
@@ -241,8 +283,8 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
             .attr("r", (d) => {
               //rayon de 3 si il y a de données
               //rayon de 0 s'il y a pas de données
-
-              return estEclo(d, year, month) ? 3 : 0;
+              return 3;
+              //return estEclo(d, year, month) ? 3 : 0;
             })
             .style("fill", "#fd40b1"), // Rouge du Japon : 0 100 90 0 (#e40521)
         (update) =>
@@ -257,35 +299,53 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
               return projection([d.longitude, d.latitude])[1];
             })
             .attr("r", (d) => {
-              return estEclo(d, year, month) ? 3 : 0;
+              //return estEclo(d, year, month) ? 3 : 0;
+              return 3;
+              //on met return 3 car il n'y a pas besoin de trier
             }),
         //quand les points disparaissent
         (exit) => exit.attr("r", () => 0).remove()
       );
-  };
+  }
   const datesEvolution = document.querySelector("#datesEvolution");
 
   let anneeCourante = 1953;
   let moisCourant = 0;
-  const afficherDate = () => {
-    moisCourant++;
-    if (anneeCourante > 2020) {
-      //comme ça on a une boucle
-      anneeCourante = 1953;
+  const dateDepart = "1953-03-31";
+  const dateFinale = new Date("2020-05-12");
+  let dateCourante = new Date(dateDepart);
+
+  function afficherDate() {
+    const jour =
+      dateCourante.getDate() <= 9
+        ? `0${dateCourante.getDate()}`
+        : dateCourante.getDate();
+    const mois =
+      dateCourante.getMonth() <= 9
+        ? `0${dateCourante.getMonth() + 1}`
+        : dateCourante.getMonth() + 1;
+    //les jours et mois n'ont pas de 0 devant tels que notre csv
+
+    const annee = dateCourante.getFullYear();
+    const dateFormatee = `${annee}-${mois}-${jour}`;
+    if (dateCourante.getTime() >= dateFinale.getTime()) {
+      dateCourante = new Date(dateDepart);
+    } else {
+      dateCourante.setDate(dateCourante.getDate() + 1);
     }
-    if (moisCourant > 12) {
-      anneeCourante++;
-      moisCourant = 1;
-    }
 
-    datesEvolution.innerText = `${moisCourant} ${anneeCourante}`;
+    //console.log(dateFormatee);
+    datesEvolution.innerText = dateFormatee;
+    const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
+    console.log(villesEclosionDateCourante);
+    console.log(dateFormatee);
 
-    afficher(donnesFinales, anneeCourante, moisCourant);
-  };
-
-  setInterval(afficherDate, 500);
+    afficher(villesEclosionDateCourante);
+  }
+  console.log(donneeParMoisJour);
+  afficher(donneeParMoisJour["1953-03-31"]);
+  //setInterval(afficherDate, 3000);
 })();
-
 
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed.csv")
@@ -322,8 +382,8 @@ d3.csv("../data/joyo_processed.csv")
           .append("p")
           .html(
             kanjiListe.ecritJap[nombreRandom[i]] +
-            " : " +
-            kanjiListe.traduction[nombreRandom[i]]
+              " : " +
+              kanjiListe.traduction[nombreRandom[i]]
           );
       }
     }
@@ -340,7 +400,6 @@ d3.csv("../data/joyo_processed.csv")
   .catch(function (error) {
     console.log(error);
   });
-
 
 //*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
 d3.csv("../data/ramen-ratings.csv").then(function (data) {
@@ -387,15 +446,17 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   // console.log({ triScore });
 
   // // 4) afficher la marque et le topFive dans l'HTML
-  const affichageRamen = d3.select("#ramensAleatoirs")
+  const affichageRamen = d3
+    .select("#ramensAleatoirs")
     .selectAll("div")
     .data(triScore)
     .enter()
     .append("div")
-    .classed("ramen-item", true) // ajouter une classe ramen-item
+    .classed("ramen-item", true); // ajouter une classe ramen-item
 
   // 5) quand on clique sur un ramen, afficher / cacher la description en dessous du produit
-  affichageRamen.append("p")
+  affichageRamen
+    .append("p")
     .html((d) => d.marque + " " + d.topFive)
     //ajouter une image avant topFive
     .append("img")
@@ -406,7 +467,8 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
     .append("span")
     .html((d) => d.topFive); // fonctionne paaaas TT_TT
 
-  affichageRamen.append("p")
+  affichageRamen
+    .append("p")
     .classed("description", true)
     .html((d) => d.description)
     .style("display", "none");
@@ -419,7 +481,6 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
       });
   });
 });
-
 
 //*** Haijin ***************************************************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
@@ -467,7 +528,6 @@ histoire.on("scroll", function () {
     stopHaijin();
   }
 });
-
 
 // A FAIRE :
 // - Résoudre problème carte (MATHILDE)
