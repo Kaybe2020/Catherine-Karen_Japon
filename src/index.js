@@ -332,17 +332,15 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     //console.log(dateFormatee);
     datesEvolution.innerText = dateFormatee;
     const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
-    // console.log(villesEclosionDateCourante);
-    // console.log(dateFormatee);
+    console.log(villesEclosionDateCourante);
+    console.log(dateFormatee);
 
     afficher(villesEclosionDateCourante);
   }
-
-  // console.log(donneeParMoisJour);
+  console.log(donneeParMoisJour);
   afficher(donneeParMoisJour["1953-03-31"]);
-  setInterval(afficherDate, 2000);
+  //setInterval(afficherDate, 3000);
 })();
-
 
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed.csv")
@@ -379,8 +377,8 @@ d3.csv("../data/joyo_processed.csv")
           .append("p")
           .html(
             kanjiListe.ecritJap[nombreRandom[i]] +
-            " : " +
-            kanjiListe.traduction[nombreRandom[i]]
+              " : " +
+              kanjiListe.traduction[nombreRandom[i]]
           );
       }
     }
@@ -461,7 +459,7 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
     .attr("src", "../img/etoile.svg")
     .attr("alt", "etoile")
     .classed("etoileRamen", true)
-    .classed("topfive", true)
+    .classed("topfive", true);
   //doit le faire en deux fois pour pouvoir afficher le topFive après l'image
   // affichageRamen
   //   .append("p")
