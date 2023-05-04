@@ -337,15 +337,17 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     //console.log(dateFormatee);
     datesEvolution.innerText = dateFormatee;
     const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
-    console.log(villesEclosionDateCourante);
-    console.log(dateFormatee);
+    // console.log(villesEclosionDateCourante);
+    // console.log(dateFormatee);
 
     afficher(villesEclosionDateCourante);
   }
-  console.log(donneeParMoisJour);
+
+  // console.log(donneeParMoisJour);
   afficher(donneeParMoisJour["1953-03-31"]);
-  //setInterval(afficherDate, 3000);
+  setInterval(afficherDate, 2000);
 })();
+
 
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed.csv")
@@ -382,8 +384,8 @@ d3.csv("../data/joyo_processed.csv")
           .append("p")
           .html(
             kanjiListe.ecritJap[nombreRandom[i]] +
-              " : " +
-              kanjiListe.traduction[nombreRandom[i]]
+            " : " +
+            kanjiListe.traduction[nombreRandom[i]]
           );
       }
     }
@@ -458,14 +460,19 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   affichageRamen
     .append("p")
     .html((d) => d.marque + " " + d.topFive)
+    .classed("topfive", true)
     //ajouter une image avant topFive
     .append("img")
     .attr("src", "../img/etoile.svg")
     .attr("alt", "etoile")
     .classed("etoileRamen", true)
-    //ajouter le topFive après l'image
-    .append("span")
-    .html((d) => d.topFive); // fonctionne paaaas TT_TT
+    .classed("topfive", true)
+  //doit le faire en deux fois pour pouvoir afficher le topFive après l'image
+  // affichageRamen
+  //   .append("p")
+  //   .html((d) => d.topFive)
+  //   .classed("topFive", true);
+  //cela coupe en 2 le topFive et l'image... du coup remis la note avant l'étoile
 
   affichageRamen
     .append("p")
@@ -530,12 +537,12 @@ histoire.on("scroll", function () {
 });
 
 // A FAIRE :
-// - Résoudre problème carte (MATHILDE)
+// OK - Résoudre problème carte (MATHILDE)
 // OK - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
 // - Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE) = croisement de données
 // OK - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
-// EN COURS - faire CSS afficher les ramens (KAREN)
+// OK - faire CSS afficher les ramens (KAREN)
 // OK - Bouton menu changer couleur en over (KAREN)
-// - Ecrire conclusion (MATHILDE + KAREN)
-// EN COURS - Mise en page final CSS (MATHILDE + KAREN)
+// OK -  Ecrire conclusion (KAREN)
+// OK - Mise en page final CSS (KAREN)
 // - Faire les 2 autres media queries (MATHILDE + KAREN)

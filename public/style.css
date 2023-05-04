@@ -37,24 +37,7 @@ body {
 
 }
 
-#toolType {
-    background-color: antiquewhite;
-    position: absolute;
-    padding: 1rem;
-    border: 1px solid black;
-    
-
-}
-
-#toolType:hover{
-    display:flex;
-
-}
-
 main {
-    /* display: inline-flex;
-    flex-direction: column;
-    align-items: flex-start;*/
     margin-top: 7%;
     margin-bottom: 0;
     width: 100%;
@@ -71,6 +54,45 @@ main {
     line-height: 1.5;
 }
 
+.explication {
+    display: flex;
+    flex-direction: column;
+    line-height: 2;
+    margin-bottom: 0;
+    color: #380120;
+}
+
+.legend {
+    font-family: 'shipporimincho';
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #003282;
+}
+
+/* Pour changer la barre de scroll **************************/
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #f823a3 #fbe1f1c1;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+
+}
+
+*::-webkit-scrollbar-track {
+    background: #fbe1f1c1;
+    border-radius: 10px;
+}
+
+/*cible l'ascenseur lui-même*/
+*::-webkit-scrollbar-thumb {
+    background-color: #f823a3;
+    border-radius: 10px;
+}
 
 /* Pour les données sur les haikus **************************/
 #haikus {
@@ -79,6 +101,7 @@ main {
     margin-bottom: 2rem;
     padding: 8px 16px;
     background-color: #fbe1f1c1;
+    border-radius: 10px;
 }
 
 #haiku {
@@ -195,16 +218,18 @@ li a:hover {
 
 
 #histoire {
-    background-color: #f0f0f0c8;
+    background-color: #f0f0f0e1;
     width: 75%;
     /* pour pouvoir scroll dans la div */
-    height: 400px;
+    height: 450px;
     overflow: auto;
-    padding: 16px;
+    padding: 0 16px;
+    /*mettre les bords arrondis*/
+    border-radius: 10px;
 }
 
 
-/*Pour les données sur les kanjis ***************************/
+/* Pour les données sur les kanjis ***************************/
 #kanjis {
     display: block;
 }
@@ -214,6 +239,7 @@ li a:hover {
     justify-content: center;
     align-items: flex-end;
     flex-direction: row-reverse;
+    margin-top: 2%;
 }
 
 #kanjiAleatoirs {
@@ -231,14 +257,14 @@ li a:hover {
     margin: 0;
 }
 
-b#uttonKanjisChange {
+#buttonKanjisChange {
     width: 20px;
     height: 20px;
     cursor: pointer;
 }
 
 
-/*Pour les données sur les floraisons sakura *****************/
+/* Pour les données sur les floraisons sakura *****************/
 #sakura {
     display: flex;
     flex-direction: column;
@@ -255,33 +281,36 @@ b#uttonKanjisChange {
     height: 420px;
 }
 
-.explication {
-    display: flex;
-    align-items: center;
-}
 
 /* pour données affichées sur carte */
 .hidden {
     display: none;
 }
 
+#toolType {
+    background-color: antiquewhite;
+    /* position: absolute; */
+    padding: 1rem;
+    border: 1px solid black;
 
-/*Pour les données sur les ramens ***************************/
+
+}
+
+#toolType:hover {
+    display: flex;
+
+}
+
+/* Pour les données sur les ramens ***************************/
 #ramen {
     width: 100%;
 }
 
 .ramen-item {
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-.etoileRamen {
-    width: 20px;
-    height: 20px;
-    margin: 0;
+    flex-direction: column;
 }
 
 #ramensAleatoirs {
@@ -289,6 +318,7 @@ b#uttonKanjisChange {
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
+    cursor: pointer;
 }
 
 
@@ -298,8 +328,31 @@ b#uttonKanjisChange {
     text-align: center;
 }
 
+.etoileRamen {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
 
-/*Pour les données du haikin ********************************/
+.description {
+    text-align: center;
+}
+
+.aligneCentre {
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-bottom: 1.2%;
+}
+
+
+/* Pour conclusion ********************************************/
+#fin {
+    margin-top: 2%;
+    text-align: right;
+}
+
+
+/* Pour les données du haikin ********************************/
 #haijin {
     width: 10%;
     align-items: end;
