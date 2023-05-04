@@ -86,13 +86,8 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 //fn qui s'appelle elle même
 
 //METTRE TRANSITION PAR RAYON ("fiouu")
-//RAJOUTER LE MOIS AU DEFILEMENT AUTOMATIQUE
-// DEFILE PAR ANNEE - MOIS - JOUR (si pas jour partir du principe que c'est le 1er - LES SAKURAS FLEURISSENT PENDANT 4 MOIS ENVIRON)
-// METTRE UN BOUTON STOP/PLAY POUR POUVOIR ARRÊTER SUR UNE ANNEE
-// QUAND LA SOURIS CLIC SUR POINT AFFICHE LE NOM DU LIEU ET LA DATE PRECISE DE FLORAISON
-// DONNER UN TITRE AU GRAPHIQUE : FLoraison des cerisiers au Japon (de... à ...)
-// METTRE UNE LEGENDE AU GRAPHIQUE : (pas d idée dsl ^^')
 
+//POUR LES HAIKU : PRENDRE PROVENANCE(pour les lier à la carte) + TITLE (pour titre haiku) + SOURCE (pour haijin)
 (async () => {
   const stockageFichiers = await Promise.all([
     d3.json("../data/japan.geojson"),
