@@ -191,13 +191,14 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     });
     //console.log(Object.keys(ville));
   });
-  console.log(donneeParMoisJour);
+  // console.log(donneeParMoisJour);
   const slider = document.querySelector("#sliderid");
   const playButton = document.querySelector("#playButton");
   const toolType = document.querySelector("#toolType");
 
   slider.setAttribute("max", getDaysBetweenDates("1953-03-31", "2020-05-12"));
   slider.setAttribute("min", "1");
+  console.log(donneeParMoisJour);
   afficher(donneeParMoisJour["1953-03-31"]);
 
   //id est nécessaire pour cancel intervalle
@@ -218,7 +219,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   });
 
   function play() {
-    stockageIdIntervalle = setInterval(afficherDate, 1000);
+    stockageIdIntervalle = setInterval(afficherDate, 50);
   }
 
   function pause() {
@@ -323,11 +324,18 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
     const annee = dateCourante.getFullYear();
     const dateFormatee = `${annee}-${mois}-${jour}`;
-    if (dateCourante.getTime() >= dateFinale.getTime()) {
+    console.log(dateCourante.getMonth());
+    if ((dateCourante.getTime() >= dateFinale.getTime())) {
       dateCourante = new Date(dateDepart);
+    } else if (dateCourante.getMonth() > 4) {
+      console.log("mois de juin");
+      dateCourante.setMonth(2);
+      dateCourante.setFullYear(dateCourante.getFullYear() + 1);
     } else {
+      console.log("1 jour en plus");
       dateCourante.setDate(dateCourante.getDate() + 1);
     }
+
 
     //console.log(dateFormatee);
     datesEvolution.innerText = dateFormatee;
@@ -337,10 +345,12 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
     afficher(villesEclosionDateCourante);
   }
-  console.log(donneeParMoisJour);
-  afficher(donneeParMoisJour["1953-03-31"]);
+  // console.log(donneeParMoisJour);
+
+  //afficher(donneeParMoisJour["1953-03-31"]);
   //setInterval(afficherDate, 3000);
 })();
+
 
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed.csv")
@@ -377,8 +387,8 @@ d3.csv("../data/joyo_processed.csv")
           .append("p")
           .html(
             kanjiListe.ecritJap[nombreRandom[i]] +
-              " : " +
-              kanjiListe.traduction[nombreRandom[i]]
+            " : " +
+            kanjiListe.traduction[nombreRandom[i]]
           );
       }
     }
@@ -395,6 +405,7 @@ d3.csv("../data/joyo_processed.csv")
   .catch(function (error) {
     console.log(error);
   });
+
 
 //*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
 d3.csv("../data/ramen-ratings.csv").then(function (data) {
