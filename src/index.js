@@ -41,7 +41,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     haikuListe.haijin.push([haiku.source]); //haiku.title, : enlevé car les haikus  n'ont pas de titre
     haikuListe.explication.push(haiku.explication);
   });
-  // console.log(haikuListe);
+  console.log(haikuListe);
 
   // Fonction pour afficher un haiku aléatoire
   function afficherHaikuAleatoire() {
@@ -79,13 +79,12 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
 
+
 //*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
 //coordonnées gps+ coordonnes japon + notre fichier
 //on importe tout d'un coup
 //fn qui s'appelle elle même
-
-//METTRE TRANSITION PAR RAYON ("fiouu")
 
 //POUR LES HAIKU : PRENDRE PROVENANCE(pour les lier à la carte) + TITLE (pour titre haiku) + SOURCE (pour haijin)
 (async () => {
@@ -101,6 +100,19 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     stockageFichiers[1],
     stockageFichiers[2],
   ];
+  d3.csv("../data/haiku_karen.csv").then(function (data) {
+    let haikuVille = {
+      provenance: [],
+      haikuJin: [],
+    };
+    // on rempli les tableaux
+    data.forEach(function (d) {
+      //haikuVille.haikuJin.push(d.title + "<br>" + d.source);
+      haikuVille.haikuJin.push([d.title, d.source].join("<br>"));
+      haikuVille.provenance.push(d.provenance);
+    });
+    console.log(haikuVille);
+  });
 
   const villes = new Map();
   //on veut mettre que les villes du japon
@@ -108,6 +120,9 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   worldcities.forEach((element) => {
     if (element.country == "Japan") {
       villes.set(element.city, element);
+      // }else if {
+      //   //on fait vérifie que la provenance de haikuVille est dans la liste des villes du Japon
+      //   haikuVille.provenance.push(element.city);
     }
   });
   // console.log(villes.get("Tokyo"));
@@ -185,7 +200,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
           donneeParMoisJour[date] = [];
           donneeParMoisJour[date].push(data);
         }
-
         //console.log(ville[propriete]);
       }
     });
@@ -198,7 +212,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
   slider.setAttribute("max", getDaysBetweenDates("1953-03-31", "2020-05-12"));
   slider.setAttribute("min", "1");
-  console.log(donneeParMoisJour);
+  // console.log(donneeParMoisJour);
   afficher(donneeParMoisJour["1953-03-31"]);
 
   //id est nécessaire pour cancel intervalle
@@ -238,24 +252,16 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     toolType.style.display = "block";
     toolType.style.top = e.clientY + 20 + "px";
     toolType.style.left = e.clientX + "px";
-    console.log(e);
+    // console.log(e);
     toolType.innerText = e.target.__data__["siteName"];
+    //ajouter titre kaiku et nom haijin
+    console.log(haikuVille.title);
 
     //console.log(e.clientY);
   }
   function cacherToolType(e) {
     toolType.style.display = "none";
   }
-
-  /*const estEclo = (data, year, month) => {
-    const dateParts = data[year].split("-");
-    const dateUn = `${dateParts[0]}-${dateParts[1]}`;
-    const dateDeux = `${year}-${month}`;
-    if (dateUn == dateDeux) {
-      return true;
-    }
-    return false;
-  };*/
 
   function afficher(data) {
     svg
@@ -324,31 +330,28 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
     const annee = dateCourante.getFullYear();
     const dateFormatee = `${annee}-${mois}-${jour}`;
-    console.log(dateCourante.getMonth());
+    // console.log(dateCourante.getMonth());
     if ((dateCourante.getTime() >= dateFinale.getTime())) {
       dateCourante = new Date(dateDepart);
+      // pour sélectionner les mois de mars - avril - mai
     } else if (dateCourante.getMonth() > 4) {
-      console.log("mois de juin");
+      // console.log("mois de juin");
       dateCourante.setMonth(2);
       dateCourante.setFullYear(dateCourante.getFullYear() + 1);
     } else {
-      console.log("1 jour en plus");
+      // console.log("1 jour en plus");
       dateCourante.setDate(dateCourante.getDate() + 1);
     }
-
 
     //console.log(dateFormatee);
     datesEvolution.innerText = dateFormatee;
     const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
-    console.log(villesEclosionDateCourante);
-    console.log(dateFormatee);
+    // console.log(villesEclosionDateCourante);
+    // console.log(dateFormatee);
 
     afficher(villesEclosionDateCourante);
   }
-  // console.log(donneeParMoisJour);
 
-  //afficher(donneeParMoisJour["1953-03-31"]);
-  //setInterval(afficherDate, 3000);
 })();
 
 

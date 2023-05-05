@@ -176,6 +176,7 @@ main {
 
 #menu {
     text-align: center;
+    z-index: 1000;
 }
 
 
@@ -226,6 +227,7 @@ li a:hover {
     padding: 0 16px;
     /*mettre les bords arrondis*/
     border-radius: 10px;
+    z-index: 1;
 }
 
 
