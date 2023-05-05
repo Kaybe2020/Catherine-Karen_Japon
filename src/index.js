@@ -41,7 +41,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     haikuListe.haijin.push([haiku.source]); //haiku.title, : enlevé car les haikus  n'ont pas de titre
     haikuListe.explication.push(haiku.explication);
   });
-  console.log(haikuListe);
+  // console.log(haikuListe);
 
   // Fonction pour afficher un haiku aléatoire
   function afficherHaikuAleatoire() {
@@ -86,7 +86,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 //on importe tout d'un coup
 //fn qui s'appelle elle même
 
-//POUR LES HAIKU : PRENDRE PROVENANCE(pour les lier à la carte) + TITLE (pour titre haiku) + SOURCE (pour haijin)
 (async () => {
   const stockageFichiers = await Promise.all([
     d3.json("../data/japan.geojson"),
@@ -94,13 +93,148 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     d3.csv("../data/worldcities.csv"),
   ]);
   // console.log(stockageFichiers);
-
-  const [japan, sakuras, worldcities] = [
-    stockageFichiers[0],
-    stockageFichiers[1],
-    stockageFichiers[2],
-  ];
   d3.csv("../data/haiku_karen.csv").then(function (data) {
+
+
+    const [japan, sakuras, worldcities] = [
+      stockageFichiers[0],
+      stockageFichiers[1],
+      stockageFichiers[2],
+    ];
+
+    const villes = new Map();
+    //on veut mettre que les villes du japon
+    // villes.set(nomIndex, value);
+    worldcities.forEach((element) => {
+      if (element.country == "Japan") {
+        villes.set(element.city, element);
+      }
+    });
+    // console.log(villes.get("Tokyo"));
+
+    //création un svg pour la carte du japon
+    const cadre = document.querySelector("#svgSakura");
+    // console.dir(cadre);
+    const hauteur = cadre.clientHeight;
+    const largeur = cadre.clientWidth;
+    const svg = d3
+      .select("#svgSakura")
+      .append("svg")
+      .attr("height", hauteur)
+      .attr("width", largeur);
+    //138,37 pour coordonnée du japon
+    // formule mathématique pour transformer sphère en plat
+    const projection = d3
+      .geoMercator()
+      .center([138, 37])
+      .scale(800)
+      .translate([largeur / 2, hauteur / 2]);
+    //variable pour contour de la map
+    const path = d3.geoPath().projection(projection);
+    //dessiner map
+    svg
+      .selectAll("path")
+      .data(japan.features)
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .style("fill", "#ccc")
+      .style("stroke", "#000");
+
+    const donnesFinales = [];
+    //on veut ajouter des longitudes et latitudes à notre fichier csv
+    //on veut regarder dans le fichier sakura si les villes correspondent au fichier worldcities
+    //si elles figurent , on leur rajoute les latitudes et longitudes
+    sakuras.forEach((sakura) => {
+      const ville = villes.get(sakura["Site Name"]);
+      if (ville) {
+        sakura.latitude = ville.lat;
+        sakura.longitude = ville.lng;
+        donnesFinales.push(sakura);
+      }
+    });
+    // console.log(donnesFinales);
+    const donneeParMoisJour = {};
+    // console.log(donnesFinales);
+    donnesFinales.forEach((ville) => {
+      //console.log(ville);
+      //pour afficher propriétés de ville
+
+      Object.keys(ville).forEach((propriete) => {
+        //Number convertit en nombre car ce sont des strings
+        // on voit qu'il y a 6 strings et cela nous permet de garder que les années
+        //console.log(Number(propriete));
+        if (!isNaN(Number(propriete))) {
+          //console.log(propriete);
+          //  console.log(ville[propriete]);
+          //on décompose date en 3 partie, car on voulait des clés
+          // const dateParts = ville[propriete].split("-");
+          //const date = `${dateParts[0]}-${dateParts[1]}`;
+          const date = ville[propriete];
+          //car quand on est à la première fois, y a pas de tableau
+          const isArray = donneeParMoisJour[date] ? true : false;
+          const data = {
+            siteName: ville["Site Name"],
+            latitude: ville.latitude,
+            longitude: ville.longitude,
+            // date: ville[propriete],
+          };
+          if (isArray) {
+            donneeParMoisJour[date].push(data);
+          } else {
+            donneeParMoisJour[date] = [];
+            donneeParMoisJour[date].push(data);
+          }
+          //console.log(ville[propriete]);
+        }
+      });
+      //console.log(Object.keys(ville));
+    });
+    // console.log(donneeParMoisJour);
+    const slider = document.querySelector("#sliderid");
+    const playButton = document.querySelector("#playButton");
+    const toolType = document.querySelector("#toolType");
+
+    slider.setAttribute("max", getDaysBetweenDates("1953-03-31", "2020-05-12"));
+    slider.setAttribute("min", "1");
+    // console.log(donneeParMoisJour);
+    afficher(donneeParMoisJour["1953-03-31"]);
+
+    //id est nécessaire pour cancel intervalle
+    let stockageIdIntervalle;
+
+    playButton.addEventListener("click", (e) => {
+      playButton.classList.toggle("pause");
+      const isPaused = playButton.classList[0];
+      //console.log(pause);
+
+      if (isPaused) {
+        playButton.innerText = "Pause";
+        pause();
+      } else {
+        playButton.innerText = "Play";
+        play();
+      }
+    });
+
+    function play() {
+      stockageIdIntervalle = setInterval(afficherDate, 50);
+    }
+
+    function pause() {
+      clearInterval(stockageIdIntervalle);
+    }
+
+    function getDaysBetweenDates(startDate, endDate) {
+      const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffDays = Math.round(Math.abs((start - end) / oneDay));
+      return diffDays;
+    }
+
+
+    // création des tableaux pour lier les haiku/jin à la toolType
     let haikuVille = {
       provenance: [],
       haikuJin: [],
@@ -108,250 +242,115 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     // on rempli les tableaux
     data.forEach(function (d) {
       //haikuVille.haikuJin.push(d.title + "<br>" + d.source);
+      // ou on peut aussi l'écrire comme cela :
       haikuVille.haikuJin.push([d.title, d.source].join("<br>"));
       haikuVille.provenance.push(d.provenance);
     });
     console.log(haikuVille);
-  });
 
-  const villes = new Map();
-  //on veut mettre que les villes du japon
-  // villes.set(nomIndex, value);
-  worldcities.forEach((element) => {
-    if (element.country == "Japan") {
-      villes.set(element.city, element);
-      // }else if {
-      //   //on fait vérifie que la provenance de haikuVille est dans la liste des villes du Japon
-      //   haikuVille.provenance.push(element.city);
+    function afficheToolType(e) {
+      toolType.style.display = "block";
+      toolType.style.top = e.clientY + 20 + "px";
+      toolType.style.left = e.clientX + "px";
+      // console.log(e);
+      toolType.innerText = e.target.__data__["siteName"];
+      //ajouter titre haiku et nom haijin
+
+      //console.log(e.clientY);
     }
-  });
-  // console.log(villes.get("Tokyo"));
-
-  //création un svg pour la carte du japon
-  const cadre = document.querySelector("#svgSakura");
-  // console.dir(cadre);
-  const hauteur = cadre.clientHeight;
-  const largeur = cadre.clientWidth;
-  const svg = d3
-    .select("#svgSakura")
-    .append("svg")
-    .attr("height", hauteur)
-    .attr("width", largeur);
-  //138,37 pour coordonnée du japon
-  // formule mathématique pour transformer sphère en plat
-  const projection = d3
-    .geoMercator()
-    .center([138, 37])
-    .scale(800)
-    .translate([largeur / 2, hauteur / 2]);
-  //variable pour contour de la map
-  const path = d3.geoPath().projection(projection);
-  //dessiner map
-  svg
-    .selectAll("path")
-    .data(japan.features)
-    .enter()
-    .append("path")
-    .attr("d", path)
-    .style("fill", "#ccc")
-    .style("stroke", "#000");
-
-  const donnesFinales = [];
-  //on veut ajouter des longitudes et latitudes à notre fichier csv
-  //on veut regarder dans le fichier sakura si les villes correspondent au fichier worldcities
-  //si elles figurent , on leur rajoute les latitudes et longitudes
-  sakuras.forEach((sakura) => {
-    const ville = villes.get(sakura["Site Name"]);
-    if (ville) {
-      sakura.latitude = ville.lat;
-      sakura.longitude = ville.lng;
-      donnesFinales.push(sakura);
+    function cacherToolType(e) {
+      toolType.style.display = "none";
     }
-  });
-  // console.log(donnesFinales);
-  const donneeParMoisJour = {};
-  //console.log(donnesFinales);
-  donnesFinales.forEach((ville) => {
-    //console.log(ville);
-    //pour afficher propriétés de ville
 
-    Object.keys(ville).forEach((propriete) => {
-      //Number convertit en nombre car ce sont des strings
-      // on voit qu'il y a 6 strings et cela nous permet de garder que les années
-      //console.log(Number(propriete));
-      if (!isNaN(Number(propriete))) {
-        //console.log(propriete);
-        //  console.log(ville[propriete]);
-        //on décompose date en 3 partie, car on voulait des clés
-        // const dateParts = ville[propriete].split("-");
-        //const date = `${dateParts[0]}-${dateParts[1]}`;
-        const date = ville[propriete];
-        //car quand on est à la première fois, y a pas de tableau
-        const isArray = donneeParMoisJour[date] ? true : false;
-        const data = {
-          siteName: ville["Site Name"],
-          latitude: ville.latitude,
-          longitude: ville.longitude,
-          // date: ville[propriete],
-        };
-        if (isArray) {
-          donneeParMoisJour[date].push(data);
-        } else {
-          donneeParMoisJour[date] = [];
-          donneeParMoisJour[date].push(data);
-        }
-        //console.log(ville[propriete]);
+    function afficher(data) {
+      svg
+        .selectAll("circle")
+        .data(data)
+        .join(
+          (enter) =>
+            enter
+              .append("circle")
+              //position x
+              .on("mouseover", afficheToolType)
+              .on("mouseout", cacherToolType)
+              .attr("cx", (d) => {
+                return projection([d.longitude, d.latitude])[0];
+              })
+              .attr("cy", (d) => {
+                return projection([d.longitude, d.latitude])[1];
+              })
+              //on définit rayon r
+              //d c'est donnée d'un sakura
+              .attr("r", (d) => {
+                //rayon de 3 si il y a de données
+                //rayon de 0 s'il y a pas de données
+                return 3;
+                //return estEclo(d, year, month) ? 3 : 0;
+              })
+              .style("fill", "#fd40b1"), // Rouge du Japon : 0 100 90 0 (#e40521)
+          (update) =>
+            update
+              .transition()
+              //500 milisecondes
+              .duration(100)
+              .attr("cx", (d) => {
+                return projection([d.longitude, d.latitude])[0];
+              })
+              .attr("cy", (d) => {
+                return projection([d.longitude, d.latitude])[1];
+              })
+              .attr("r", (d) => {
+                //return estEclo(d, year, month) ? 3 : 0;
+                return 3;
+                //on met return 3 car il n'y a pas besoin de trier
+              }),
+          //quand les points disparaissent
+          (exit) => exit.attr("r", () => 0).remove()
+        );
+    }
+    const datesEvolution = document.querySelector("#datesEvolution");
+
+    let anneeCourante = 1953;
+    let moisCourant = 0;
+    const dateDepart = "1953-03-31";
+    const dateFinale = new Date("2020-05-12");
+    let dateCourante = new Date(dateDepart);
+
+    function afficherDate() {
+      const jour =
+        dateCourante.getDate() <= 9
+          ? `0${dateCourante.getDate()}`
+          : dateCourante.getDate();
+      const mois =
+        dateCourante.getMonth() <= 9
+          ? `0${dateCourante.getMonth() + 1}`
+          : dateCourante.getMonth() + 1;
+      //les jours et mois n'ont pas de 0 devant tels que notre csv
+
+      const annee = dateCourante.getFullYear();
+      const dateFormatee = `${annee}-${mois}-${jour}`;
+      // console.log(dateCourante.getMonth());
+      if ((dateCourante.getTime() >= dateFinale.getTime())) {
+        dateCourante = new Date(dateDepart);
+        // pour sélectionner les mois de mars - avril - mai
+      } else if (dateCourante.getMonth() > 4) {
+        // console.log("mois de juin");
+        dateCourante.setMonth(2);
+        dateCourante.setFullYear(dateCourante.getFullYear() + 1);
+      } else {
+        // console.log("1 jour en plus");
+        dateCourante.setDate(dateCourante.getDate() + 1);
       }
-    });
-    //console.log(Object.keys(ville));
-  });
-  // console.log(donneeParMoisJour);
-  const slider = document.querySelector("#sliderid");
-  const playButton = document.querySelector("#playButton");
-  const toolType = document.querySelector("#toolType");
 
-  slider.setAttribute("max", getDaysBetweenDates("1953-03-31", "2020-05-12"));
-  slider.setAttribute("min", "1");
-  // console.log(donneeParMoisJour);
-  afficher(donneeParMoisJour["1953-03-31"]);
+      //console.log(dateFormatee);
+      datesEvolution.innerText = dateFormatee;
+      const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
+      // console.log(villesEclosionDateCourante);
+      // console.log(dateFormatee);
 
-  //id est nécessaire pour cancel intervalle
-  let stockageIdIntervalle;
-
-  playButton.addEventListener("click", (e) => {
-    playButton.classList.toggle("pause");
-    const isPaused = playButton.classList[0];
-    //console.log(pause);
-
-    if (isPaused) {
-      playButton.innerText = "Pause";
-      pause();
-    } else {
-      playButton.innerText = "Play";
-      play();
+      afficher(villesEclosionDateCourante);
     }
   });
-
-  function play() {
-    stockageIdIntervalle = setInterval(afficherDate, 50);
-  }
-
-  function pause() {
-    clearInterval(stockageIdIntervalle);
-  }
-
-  function getDaysBetweenDates(startDate, endDate) {
-    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffDays = Math.round(Math.abs((start - end) / oneDay));
-    return diffDays;
-  }
-
-  function afficheToolType(e) {
-    toolType.style.display = "block";
-    toolType.style.top = e.clientY + 20 + "px";
-    toolType.style.left = e.clientX + "px";
-    // console.log(e);
-    toolType.innerText = e.target.__data__["siteName"];
-    //ajouter titre kaiku et nom haijin
-    console.log(haikuVille.title);
-
-    //console.log(e.clientY);
-  }
-  function cacherToolType(e) {
-    toolType.style.display = "none";
-  }
-
-  function afficher(data) {
-    svg
-      .selectAll("circle")
-      .data(data)
-      .join(
-        (enter) =>
-          enter
-            .append("circle")
-            //position x
-            .on("mouseover", afficheToolType)
-            .on("mouseout", cacherToolType)
-            .attr("cx", (d) => {
-              return projection([d.longitude, d.latitude])[0];
-            })
-            .attr("cy", (d) => {
-              return projection([d.longitude, d.latitude])[1];
-            })
-            //on définit rayon r
-            //d c'est donnée d'un sakura
-            .attr("r", (d) => {
-              //rayon de 3 si il y a de données
-              //rayon de 0 s'il y a pas de données
-              return 3;
-              //return estEclo(d, year, month) ? 3 : 0;
-            })
-            .style("fill", "#fd40b1"), // Rouge du Japon : 0 100 90 0 (#e40521)
-        (update) =>
-          update
-            .transition()
-            //500 milisecondes
-            .duration(100)
-            .attr("cx", (d) => {
-              return projection([d.longitude, d.latitude])[0];
-            })
-            .attr("cy", (d) => {
-              return projection([d.longitude, d.latitude])[1];
-            })
-            .attr("r", (d) => {
-              //return estEclo(d, year, month) ? 3 : 0;
-              return 3;
-              //on met return 3 car il n'y a pas besoin de trier
-            }),
-        //quand les points disparaissent
-        (exit) => exit.attr("r", () => 0).remove()
-      );
-  }
-  const datesEvolution = document.querySelector("#datesEvolution");
-
-  let anneeCourante = 1953;
-  let moisCourant = 0;
-  const dateDepart = "1953-03-31";
-  const dateFinale = new Date("2020-05-12");
-  let dateCourante = new Date(dateDepart);
-
-  function afficherDate() {
-    const jour =
-      dateCourante.getDate() <= 9
-        ? `0${dateCourante.getDate()}`
-        : dateCourante.getDate();
-    const mois =
-      dateCourante.getMonth() <= 9
-        ? `0${dateCourante.getMonth() + 1}`
-        : dateCourante.getMonth() + 1;
-    //les jours et mois n'ont pas de 0 devant tels que notre csv
-
-    const annee = dateCourante.getFullYear();
-    const dateFormatee = `${annee}-${mois}-${jour}`;
-    // console.log(dateCourante.getMonth());
-    if ((dateCourante.getTime() >= dateFinale.getTime())) {
-      dateCourante = new Date(dateDepart);
-      // pour sélectionner les mois de mars - avril - mai
-    } else if (dateCourante.getMonth() > 4) {
-      // console.log("mois de juin");
-      dateCourante.setMonth(2);
-      dateCourante.setFullYear(dateCourante.getFullYear() + 1);
-    } else {
-      // console.log("1 jour en plus");
-      dateCourante.setDate(dateCourante.getDate() + 1);
-    }
-
-    //console.log(dateFormatee);
-    datesEvolution.innerText = dateFormatee;
-    const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
-    // console.log(villesEclosionDateCourante);
-    // console.log(dateFormatee);
-
-    afficher(villesEclosionDateCourante);
-  }
-
 })();
 
 
