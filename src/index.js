@@ -93,7 +93,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     d3.csv("../data/worldcities.csv"),
   ]);
   // console.log(stockageFichiers);
-  d3.csv("../data/haiku_karen.csv").then(function (data) {
+  d3.csv("../data/haiku_karen.csv").then(function (dataHaiku) {
 
 
     const [japan, sakuras, worldcities] = [
@@ -240,20 +240,24 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       haikuJin: [],
     };
     // on rempli les tableaux
-    data.forEach(function (d) {
+    dataHaiku.forEach(function (d) {
       //haikuVille.haikuJin.push(d.title + "<br>" + d.source);
       // ou on peut aussi l'écrire comme cela :
-      haikuVille.haikuJin.push([d.title, d.source].join("<br>"));
+      haikuVille.haikuJin.push([d.title," wrote by " + d.source].join("<br>"));
       haikuVille.provenance.push(d.provenance);
     });
     console.log(haikuVille);
 
     function afficheToolType(e) {
       toolType.style.display = "block";
-      toolType.style.top = e.clientY + 20 + "px";
-      toolType.style.left = e.clientX + "px";
+      // toolType.style.top = e.clientY + 20 + "px";
+      // toolType.style.left = e.clientX + "px";
       // console.log(e);
-      toolType.innerText = e.target.__data__["siteName"];
+
+      //chercher la ville dans le tableau hiaku et trouver son index
+      const index = haikuVille.provenance.indexOf(e.target.__data__["siteName"]);
+
+      toolType.innerHTML ="<b>"+ e.target.__data__["siteName"]+"</b>" + "<br>" + "<br>"+ "Haiku(s) made on this place :" + "<br>" + haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
       //ajouter titre haiku et nom haijin
 
       //console.log(e.clientY);
