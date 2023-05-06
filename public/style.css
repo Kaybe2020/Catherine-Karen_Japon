@@ -300,12 +300,25 @@ li a:hover {
     border-radius: 10px;
     top: 0;
     left: 0;
+    display: none;
 
 }
 
 #toolType:hover {
     display: flex;
 
+}
+
+/*bouton play/stop*/
+
+#playButton {
+    border: none;
+    background-color: transparent;
+}
+
+#menuYear {
+    display: flex;
+    align-items: center;
 }
 
 /* Pour les données sur les ramens ***************************/

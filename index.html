@@ -18,6 +18,8 @@
     <!-- lier JS -->
     <script src="/src/index.js" type="module" defer></script>
 
+     <!-- lier au bouton play/pause sakura -->
+    <script src="https://cdn.lordicon.com/bhenfmcm.js" defer></script>
 </head>
 
 <body>
@@ -121,8 +123,16 @@
                 </p>
 
                 <div id="sakura">
-                    <div id="slider"> <input id="sliderid" type="range">
-                        <button id="playButton" class="pause"> Pause </button>
+                    <div id="menuYear"> <select name="years" id="year-select">
+                        <option value="1953" >Choose a year</option>
+                    </select>
+                        <button id="playButton" > 
+                            <lord-icon
+                                src="https://cdn.lordicon.com/ensnyqet.json"
+                                trigger="morph"
+                                colors="primary:#5fa7d7"
+                                style="width:20px;height:20px">
+                            </lord-icon> </button>
                     </div>
                     <div id="toolType"></div>
                     <div id="datesEvolution"> </div>

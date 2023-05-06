@@ -79,7 +79,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
 
-
 //*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
 //coordonnées gps+ coordonnes japon + notre fichier
@@ -94,8 +93,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   ]);
   // console.log(stockageFichiers);
   d3.csv("../data/haiku_karen.csv").then(function (dataHaiku) {
-
-
     const [japan, sakuras, worldcities] = [
       stockageFichiers[0],
       stockageFichiers[1],
@@ -160,6 +157,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       //console.log(ville);
       //pour afficher propriétés de ville
 
+      //console.log(ville);
       Object.keys(ville).forEach((propriete) => {
         //Number convertit en nombre car ce sont des strings
         // on voit qu'il y a 6 strings et cela nous permet de garder que les années
@@ -171,32 +169,36 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
           // const dateParts = ville[propriete].split("-");
           //const date = `${dateParts[0]}-${dateParts[1]}`;
           const date = ville[propriete];
-          //car quand on est à la première fois, y a pas de tableau
-          const isArray = donneeParMoisJour[date] ? true : false;
-          const data = {
-            siteName: ville["Site Name"],
-            latitude: ville.latitude,
-            longitude: ville.longitude,
-            // date: ville[propriete],
-          };
-          if (isArray) {
-            donneeParMoisJour[date].push(data);
-          } else {
-            donneeParMoisJour[date] = [];
-            donneeParMoisJour[date].push(data);
-          }
           //console.log(ville[propriete]);
+          if (date) {
+            //car quand on est à la première fois, y a pas de tableau
+            const isArray = donneeParMoisJour[date] ? true : false;
+            const data = {
+              siteName: ville["Site Name"],
+              latitude: ville.latitude,
+              longitude: ville.longitude,
+              // date: ville[propriete],
+            };
+            if (isArray) {
+              donneeParMoisJour[date].push(data);
+            } else {
+              donneeParMoisJour[date] = [];
+              donneeParMoisJour[date].push(data);
+            }
+            //console.log(ville[propriete]);
+            //console.log(date);
+          }
         }
       });
       //console.log(Object.keys(ville));
     });
-    // console.log(donneeParMoisJour);
-    const slider = document.querySelector("#sliderid");
+    console.log(donneeParMoisJour);
+
     const playButton = document.querySelector("#playButton");
     const toolType = document.querySelector("#toolType");
+    const lordIcon = document.querySelector("#playButton lord-icon");
+    const yearSelect = document.querySelector("#year-select");
 
-    slider.setAttribute("max", getDaysBetweenDates("1953-03-31", "2020-05-12"));
-    slider.setAttribute("min", "1");
     // console.log(donneeParMoisJour);
     afficher(donneeParMoisJour["1953-03-31"]);
 
@@ -209,21 +211,72 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       //console.log(pause);
 
       if (isPaused) {
-        playButton.innerText = "Pause";
+        lordIcon.src = "https://cdn.lordicon.com/xddtsyvc.json";
         pause();
       } else {
-        playButton.innerText = "Play";
+        lordIcon.src = "https://cdn.lordicon.com/ensnyqet.json";
         play();
       }
     });
 
     function play() {
-      stockageIdIntervalle = setInterval(afficherDate, 50);
+      stockageIdIntervalle = setInterval(afficherDate, 5000);
     }
 
     function pause() {
       clearInterval(stockageIdIntervalle);
     }
+
+    //menu
+
+    //set pour faire valeurs uniques et est un objet
+    const annees = new Set();
+    //itération sur les dates
+    //tranformer donnesParMoiJour en tableau car c'est un objet via Object.keys
+    //split pour séparer
+
+    Object.keys(donneeParMoisJour).forEach((date) => {
+      //console.log(date);
+
+      const donneesdate = date.split("-");
+      //console.log(date);
+      const year = donneesdate[0];
+      annees.add(year);
+    });
+
+    //itération sur un objet avec for of
+    for (const annee of annees.values()) {
+      const option = document.createElement("option");
+
+      option.innerText = annee;
+
+      option.value = annee;
+
+      yearSelect.appendChild(option);
+      //console.log(annee);
+    }
+
+    yearSelect.addEventListener("change", (e) => {
+      // console.log(document.querySelector("option[selected]"));
+      //parent stocke la valeur
+      //console.log(e.target.value);
+      const anneemenu = e.target.value;
+      const chosendate = Object.keys(donneeParMoisJour).filter((date) => {
+        const donneesdate = date.split("-");
+
+        const year = donneesdate[0];
+
+        if (anneemenu == year) {
+          return date;
+        }
+      })[0];
+      console.log(chosendate);
+
+      const villes = donneeParMoisJour[chosendate];
+      console.log(villes);
+    });
+
+    //index est chosendate(date formatée) -> afficher()
 
     function getDaysBetweenDates(startDate, endDate) {
       const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
@@ -232,7 +285,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       const diffDays = Math.round(Math.abs((start - end) / oneDay));
       return diffDays;
     }
-
 
     // création des tableaux pour lier les haiku/jin à la toolType
     let haikuVille = {
@@ -243,7 +295,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     dataHaiku.forEach(function (d) {
       //haikuVille.haikuJin.push(d.title + "<br>" + d.source);
       // ou on peut aussi l'écrire comme cela :
-      haikuVille.haikuJin.push([d.title," wrote by " + d.source].join("<br>"));
+      haikuVille.haikuJin.push([d.title, " wrote by " + d.source].join("<br>"));
       haikuVille.provenance.push(d.provenance);
     });
     console.log(haikuVille);
@@ -255,9 +307,19 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       // console.log(e);
 
       //chercher la ville dans le tableau hiaku et trouver son index
-      const index = haikuVille.provenance.indexOf(e.target.__data__["siteName"]);
+      const index = haikuVille.provenance.indexOf(
+        e.target.__data__["siteName"]
+      );
 
-      toolType.innerHTML ="<b>"+ e.target.__data__["siteName"]+"</b>" + "<br>" + "<br>"+ "Haiku(s) made on this place :" + "<br>" + haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
+      toolType.innerHTML =
+        "<b>" +
+        e.target.__data__["siteName"] +
+        "</b>" +
+        "<br>" +
+        "<br>" +
+        "Haiku(s) made on this place :" +
+        "<br>" +
+        haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
       //ajouter titre haiku et nom haijin
 
       //console.log(e.clientY);
@@ -334,7 +396,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       const annee = dateCourante.getFullYear();
       const dateFormatee = `${annee}-${mois}-${jour}`;
       // console.log(dateCourante.getMonth());
-      if ((dateCourante.getTime() >= dateFinale.getTime())) {
+      if (dateCourante.getTime() >= dateFinale.getTime()) {
         dateCourante = new Date(dateDepart);
         // pour sélectionner les mois de mars - avril - mai
       } else if (dateCourante.getMonth() > 4) {
@@ -354,9 +416,9 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
       afficher(villesEclosionDateCourante);
     }
+    play();
   });
 })();
-
 
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed.csv")
@@ -393,8 +455,8 @@ d3.csv("../data/joyo_processed.csv")
           .append("p")
           .html(
             kanjiListe.ecritJap[nombreRandom[i]] +
-            " : " +
-            kanjiListe.traduction[nombreRandom[i]]
+              " : " +
+              kanjiListe.traduction[nombreRandom[i]]
           );
       }
     }
@@ -411,7 +473,6 @@ d3.csv("../data/joyo_processed.csv")
   .catch(function (error) {
     console.log(error);
   });
-
 
 //*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
 d3.csv("../data/ramen-ratings.csv").then(function (data) {
@@ -556,3 +617,7 @@ histoire.on("scroll", function () {
 // OK -  Ecrire conclusion (KAREN)
 // OK - Mise en page final CSS (KAREN)
 // - Faire les 2 autres media queries (MATHILDE + KAREN)
+
+//menu
+//nothing écrit dans le rectangle
+//revoir le code et le rendre plus joli
