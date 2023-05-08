@@ -310,19 +310,12 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       const index = haikuVille.provenance.indexOf(
         e.target.__data__["siteName"]
       );
-
-      toolType.innerHTML =
-        "<b>" +
-        e.target.__data__["siteName"] +
-        "</b>" +
-        "<br>" +
-        "<br>" +
-        "Haiku(s) made on this place :" +
-        "<br>" +
-        haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
-      //ajouter titre haiku et nom haijin
-
-      //console.log(e.clientY);
+        //ajouter titre haiku et nom haijin
+      toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>" + "<br>" + "<br>" + "Haiku(s) made on this place :" + "<br>" + haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
+      // S'il n'y a pas de haiku, changer undefined en autre chose
+      if (haikuVille.haikuJin[index] == undefined) {
+        toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>" + "<br>" + "<br>" + "No haiku made on this place yet";
+      }
     }
     function cacherToolType(e) {
       toolType.style.display = "none";
@@ -589,12 +582,11 @@ histoire.on("scroll", function () {
     perso
       .transition()
       .duration(500)
-      .ease(d3.easeLinear) // sert à faire une transition linéaire
+      .ease(d3.easeLinear)
       .attrTween("transform", function () {
-        // Ajout de la translation dans la matrice de transformation existante (HTML)
         return d3.interpolateString(
-          "matrix(0.6,0,0,0.6,0,0)", // transformation initiale
-          "matrix(0.6,0,0,0.6,0,0)" // transformation finale (sans la translation)
+          "matrix(0.6,0,0,0.6,0,0)", 
+          "matrix(0.6,0,0,0.6,0,0)" 
         );
       });
   }
@@ -610,7 +602,7 @@ histoire.on("scroll", function () {
 // A FAIRE :
 // OK - Résoudre problème carte (MATHILDE)
 // OK - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
-// - Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE) = croisement de données
+// OK- Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE-KAREN) = croisement de données
 // OK - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
 // OK - faire CSS afficher les ramens (KAREN)
 // OK - Bouton menu changer couleur en over (KAREN)
