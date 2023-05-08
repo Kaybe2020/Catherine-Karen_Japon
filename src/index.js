@@ -26,7 +26,6 @@ menuImg.addEventListener("mouseout", function () {
 
 //*** Haiku ******************************************************************************************************************************/
 d3.csv("../data/haiku_karen.csv").then(function (data) {
-  // Code de la visualisation ()
   let haikuListe = {
     haikus: [],
     haijin: [],
@@ -41,7 +40,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     haikuListe.haijin.push([haiku.source]); //haiku.title, : enlevé car les haikus  n'ont pas de titre
     haikuListe.explication.push(haiku.explication);
   });
-  // console.log(haikuListe);
 
   // Fonction pour afficher un haiku aléatoire
   function afficherHaikuAleatoire() {
@@ -75,15 +73,11 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   d3.select("#buttonHaikuChange").on("click", function () {
     afficherHaikuAleatoire();
   });
-
   //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
 
 //*** Sakura ****************************************************************************************************************************/
-//cerisiers dates floraison
-//coordonnées gps+ coordonnes japon + notre fichier
-//on importe tout d'un coup
-//fn qui s'appelle elle même
+//cerisiers dates floraison /coordonnées gps+ coordonnes japon + notre fichier /on importe tout d'un coup /fn qui s'appelle elle même
 
 (async () => {
   const stockageFichiers = await Promise.all([
@@ -91,7 +85,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     d3.csv("../data/sakura_full_bloom_dates_map.csv"),
     d3.csv("../data/worldcities.csv"),
   ]);
-  // console.log(stockageFichiers);
+  // mettre ici pour les haikus afin de pouvoir les appeller n'importe quand dans le code de la carte
   d3.csv("../data/haiku_karen.csv").then(function (dataHaiku) {
     const [japan, sakuras, worldcities] = [
       stockageFichiers[0],
@@ -111,7 +105,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
     //création un svg pour la carte du japon
     const cadre = document.querySelector("#svgSakura");
-    // console.dir(cadre);
+    // console.dir(cadre); //-> affiche les propriétés de l'élément
     const hauteur = cadre.clientHeight;
     const largeur = cadre.clientWidth;
     const svg = d3
@@ -119,11 +113,10 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       .append("svg")
       .attr("height", hauteur)
       .attr("width", largeur);
-    //138,37 pour coordonnée du japon
     // formule mathématique pour transformer sphère en plat
     const projection = d3
       .geoMercator()
-      .center([138, 37])
+      .center([138, 37]) //138,37 pour coordonnée du japon
       .scale(800)
       .translate([largeur / 2, hauteur / 2]);
     //variable pour contour de la map
@@ -276,7 +269,16 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       console.log(villes);
     });
 
-    //index est chosendate(date formatée) -> afficher()
+    //index est chosendate(date formatée) -> afficher() 
+    // raccorder l'année /index avec YearSelect et faire match avec chosendate  et utiliser la fonction afficehr en conséquence
+
+
+
+
+
+
+
+
 
     function getDaysBetweenDates(startDate, endDate) {
       const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
@@ -310,7 +312,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       const index = haikuVille.provenance.indexOf(
         e.target.__data__["siteName"]
       );
-        //ajouter titre haiku et nom haijin
+      //ajouter titre haiku et nom haijin
       toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>" + "<br>" + "<br>" + "Haiku(s) made on this place :" + "<br>" + haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
       // S'il n'y a pas de haiku, changer undefined en autre chose
       if (haikuVille.haikuJin[index] == undefined) {
@@ -388,24 +390,18 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
       const annee = dateCourante.getFullYear();
       const dateFormatee = `${annee}-${mois}-${jour}`;
-      // console.log(dateCourante.getMonth());
       if (dateCourante.getTime() >= dateFinale.getTime()) {
         dateCourante = new Date(dateDepart);
         // pour sélectionner les mois de mars - avril - mai
       } else if (dateCourante.getMonth() > 4) {
-        // console.log("mois de juin");
         dateCourante.setMonth(2);
         dateCourante.setFullYear(dateCourante.getFullYear() + 1);
       } else {
-        // console.log("1 jour en plus");
         dateCourante.setDate(dateCourante.getDate() + 1);
       }
 
-      //console.log(dateFormatee);
       datesEvolution.innerText = dateFormatee;
       const villesEclosionDateCourante = donneeParMoisJour[dateFormatee] || [];
-      // console.log(villesEclosionDateCourante);
-      // console.log(dateFormatee);
 
       afficher(villesEclosionDateCourante);
     }
@@ -585,8 +581,8 @@ histoire.on("scroll", function () {
       .ease(d3.easeLinear)
       .attrTween("transform", function () {
         return d3.interpolateString(
-          "matrix(0.6,0,0,0.6,0,0)", 
-          "matrix(0.6,0,0,0.6,0,0)" 
+          "matrix(0.6,0,0,0.6,0,0)",
+          "matrix(0.6,0,0,0.6,0,0)"
         );
       });
   }
@@ -600,16 +596,5 @@ histoire.on("scroll", function () {
 });
 
 // A FAIRE :
-// OK - Résoudre problème carte (MATHILDE)
-// OK - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
-// OK- Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE-KAREN) = croisement de données
-// OK - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
-// OK - faire CSS afficher les ramens (KAREN)
-// OK - Bouton menu changer couleur en over (KAREN)
-// OK -  Ecrire conclusion (KAREN)
-// OK - Mise en page final CSS (KAREN)
 // - Faire les 2 autres media queries (MATHILDE + KAREN)
 
-//menu
-//nothing écrit dans le rectangle
-//revoir le code et le rendre plus joli

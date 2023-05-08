@@ -83,6 +83,7 @@ main {
 
 }
 
+/*Change la couleur de la barre de l'ascenceur*/
 *::-webkit-scrollbar-track {
     background: #fbe1f1c1;
     border-radius: 10px;
@@ -92,6 +93,39 @@ main {
 *::-webkit-scrollbar-thumb {
     background-color: #f823a3;
     border-radius: 10px;
+}
+
+/*change la couleur de selection d'un menu déroulant*/
+select {
+    background-color: #fbe1f1c1;
+    color: #f823a3;
+    font-family: 'bonzairegular';
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+
+/*change le bleu de sélection de base du menu deroulant*/
+select option:checked {
+    background-color: #f823a3;
+    color: #fbe1f1c1;
+}
+
+/***********************************************************************/
+/*change la couleur de selection texte*/
+::selection {
+    background-color: #fbe1f1c1;
+    color: #fd40b1;
+    ;
+}
+
+/* Firefox */
+::-moz-selection {
+    background-color: #fbe1f1c1;
+    color: #fd40b1;
+    ;
 }
 
 /* Pour les données sur les haikus **************************/
