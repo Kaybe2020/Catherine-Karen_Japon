@@ -421,7 +421,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 })();
 
 //*** Traduction Kanji ******************************************************************************************************************/
-d3.csv("../data/joyo_processed.csv")
+d3.csv("../data/joyo_processed_en.csv")
   .then(function (data) {
     // Code de la visualisation ()
     let kanjiListe = {
@@ -455,8 +455,8 @@ d3.csv("../data/joyo_processed.csv")
           .append("p")
           .html(
             kanjiListe.ecritJap[nombreRandom[i]] +
-              " : " +
-              kanjiListe.traduction[nombreRandom[i]]
+            " : " +
+            kanjiListe.traduction[nombreRandom[i]]
           );
       }
     }
