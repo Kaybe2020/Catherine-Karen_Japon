@@ -1,14 +1,11 @@
 <g>Contexte :</g>
     Les données viennent de Kaggle. Il y en a plusieurs :
 
-   - Haiku Dataset, (HARSHIT JHALANI · UPDATED 3 YEARS AGO),
-          <br><i>contexte</i> :These English haikus are collected from multiple sources. Haiku is a type of short-form poetry originally from Japan. Haiku in English has a fixed-form 5-3-5 syllable (or 3-5-3 word) haiku is sometimes known as a lune.
+   - Haiku Dataset, (données prises sur le site : https://reedsy.com/discovery/blog/haiku-poem-examples),
+          <br><i>contexte</i> : Site proposant les 40 plus célèbres haikus.
 
-   - Cherry Blossom Blooming Prediction, (AKIO ONODERA · UPDATED 2 MONTHS AGO),
-        <br><i>contexte</i> : Predict the blossoming date of cherry blossoms by analyzing past temperature data and  flowering information.
-
-   - Starter: Japanese Cherry Blossom Data 1692b14a-e, (KAGGLE KERNELER · 2Y AGO),
-        <br><i>contexte</i> : This is an automatically-generated kernel with starter code demonstrating how to read in the data and begin exploring.
+   - Japanese Cherry Blossom Data, (RYAN GLASNAPP · UPDATED 2 YEARS AGO),
+        <br><i>contexte</i> : Cherry Blossom (Sakura) Bloom Dates from 1953 to 2020.
 
    - Ramen EDA, (MAAZ KHAN · 2Y AGO),
         <br><i>contexte</i> : Il y a des informations sur la marque, la variété et le style de ramen.
@@ -27,6 +24,7 @@ actuelles comme les meilleurs ramens classés par des notes "avis", d'expliquer 
 Par conséquent nous désirons explorer et expliquer cette thématique.
 
 Références : 
+- Pour les haikus, les données viennent du site : 
 - Les données concerant les kanjis ont été reprises plusieurs fois afin de créer des cours pour apprendre ces derniers.
 - Pour la floraisons des sakuras, les données ont été utilisées pour avoir accès aux prédictions.
 - Il semble que les autres données n'aient pas été exploitées.
