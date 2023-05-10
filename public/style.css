@@ -223,8 +223,9 @@ select option:checked {
 }
 
 #menuDeroulant.active {
-    transform: translateX(0); 
-    position: absolute;
+    transform: translateX(0);
+    position: relative;
+    /*mettre en absolu dans petite taille padding 0 -> 32*/
     z-index: 1000;
 }
 
@@ -241,7 +242,7 @@ li a {
     color: #f0f0f0;
     font-family: 'bonzairegular';
     font-size: 1.5rem;
-    padding: 8px 32px 6px 16px;
+    padding: 8px 0px 6px 16px;
     text-decoration: none;
 }
 
@@ -261,7 +262,7 @@ li a:hover {
     padding: 0 16px;
     /*mettre les bords arrondis*/
     border-radius: 10px;
-    position:relative;
+    position: relative;
     z-index: 1;
 }
 

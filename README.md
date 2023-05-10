@@ -24,7 +24,7 @@ actuelles comme les meilleurs ramens classés par des notes "avis", d'expliquer 
 Par conséquent nous désirons explorer et expliquer cette thématique.
 
 Références : 
-- Pour les haikus, les données viennent du site : 
+- Pour les haikus, les données du site sont disponibles (nombre de vues inconnu).
 - Les données concerant les kanjis ont été reprises plusieurs fois afin de créer des cours pour apprendre ces derniers.
-- Pour la floraisons des sakuras, les données ont été utilisées pour avoir accès aux prédictions.
+- Pour la floraisons des sakuras, les données ont été utilisées pour avoir accès aux prédictions passées.
 - Il semble que les autres données n'aient pas été exploitées.
