@@ -94,7 +94,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     d3.csv("../data/sakura_full_bloom_dates_map.csv"),
     d3.csv("../data/worldcities.csv"),
   ]);
-  // console.log(stockageFichiers);
   //demander à karen
   d3.csv("../data/haiku_karen.csv").then(function (dataHaiku) {
     const [japan, sakuras, worldcities] = [
@@ -102,7 +101,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       stockageFichiers[1],
       stockageFichiers[2],
     ];
-
     const villes = new Map();
     //on veut mettre que les villes du japon
     // villes.set(nomIndex, value);
@@ -112,7 +110,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
         villes.set(element.city, element);
       }
     });
-    // console.log(villes.get("Tokyo"));
 
     //création un svg pour la carte du japon
     const cadre = document.querySelector("#svgSakura");
@@ -148,7 +145,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     const villesAvecCoordonnees = [];
     //on veut ajouter des longitudes et latitudes à notre fichier csv
     //on veut regarder dans le fichier sakura si les villes correspondent au fichier worldcities
-    //si elles figurent , on leur rajoute les latitudes et longitudes
+    //si elles figurent, on leur rajoute les latitudes et longitudes
     sakuras.forEach((sakura) => {
       //villes c'est toutes les villes du Japon de worldcities
       const ville = villes.get(sakura["Site Name"]);
@@ -256,7 +253,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       provenance: [],
       haikuJin: [],
     };
-    // on rempli les tableaux
+    // on remplit les tableaux
     dataHaiku.forEach(function (d) {
       //haikuVille.haikuJin.push(d.title + "<br>" + d.source);
       // ou on peut aussi l'écrire comme cela :
@@ -440,7 +437,6 @@ d3.csv("../data/joyo_processed_en.csv")
           nombreRandom.push(random);
         }
       } while (nombreRandom.length < 10);
-      // console.log(nombreRandom);
       //Afficher les kanjis en fonction de nombrerandom
       for (let i = 0; i < nombreRandom.length; i++) {
         d3.select("#kanjiAleatoirs")
