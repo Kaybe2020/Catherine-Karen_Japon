@@ -2,7 +2,7 @@
 // worldcities : https://www.kaggle.com/datasets/juanmah/world-cities
 // fullbloom : on a pas les coordonnes des villes, donc pas capable de les afficher
 //japan geoson pour dessiner la map
-//problème : wolrdcities ne comportait pas les villes de sakurafull blame : on a dû filtrer avec map sur seulement les villes qu'on garde
+//problème : wolrdcities ne comportait pas les villes de sakurafull blame
 
 // Importation D3 (plus simple que de faire toutes les importations de ce que l'on a besoin)
 import * as d3 from "d3";
@@ -32,7 +32,6 @@ menuImg.addEventListener("mouseout", function () {
 
 //*** Haiku ******************************************************************************************************************************/
 d3.csv("../data/haiku_karen.csv").then(function (data) {
-  // Code de la visualisation ()
   let haikuListe = {
     haikus: [],
     haijin: [],
@@ -47,7 +46,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     haikuListe.haijin.push([haiku.source]); //haiku.title, : enlevé car les haikus  n'ont pas de titre
     haikuListe.explication.push(haiku.explication);
   });
-  // console.log(haikuListe);
 
   // Fonction pour afficher un haiku aléatoire
   function afficherHaikuAleatoire() {
@@ -81,7 +79,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   d3.select("#buttonHaikuChange").on("click", function () {
     afficherHaikuAleatoire();
   });
-
   //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
 
@@ -119,7 +116,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
     //création un svg pour la carte du japon
     const cadre = document.querySelector("#svgSakura");
-    // console.dir(cadre);
+    // console.dir(cadre); //-> affiche les propriétés de l'élément
     const hauteur = cadre.clientHeight;
     const largeur = cadre.clientWidth;
     const svg = d3
@@ -127,7 +124,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       .append("svg")
       .attr("height", hauteur)
       .attr("width", largeur);
-    //138,37 pour coordonnée du japon
     // formule mathématique pour transformer sphère en plat
     const projection = d3
       .geoMercator()
@@ -380,7 +376,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
       const annee = dateCourante.getFullYear();
       const dateFormatee = `${annee}-${mois}-${jour}`;
-
       if (dateCourante.getTime() >= dateFinale.getTime()) {
         dateCourante = new Date(dateDepart);
         // pour sélectionner les mois de mars - avril - mai de l'éclosion
@@ -604,16 +599,4 @@ histoire.on("scroll", function () {
 });
 
 // A FAIRE :
-// OK - Résoudre problème carte (MATHILDE)
-// OK - Rajouter régions pour Haijin dans "haiku_karen.csv" (KAREN)
-// OK- Ajouter Nom région + en-dessous : titre du Haiku + nom du Haijin dans l'encadré de la carte (mouseOver) (MATHILDE-KAREN) = croisement de données
-// OK - faire un bouton pour afficher les Haikus + kanjis aléaoirs (KAREN)
-// OK - faire CSS afficher les ramens (KAREN)
-// OK - Bouton menu changer couleur en over (KAREN)
-// OK -  Ecrire conclusion (KAREN)
-// OK - Mise en page final CSS (KAREN)
 // - Faire les 2 autres media queries (MATHILDE + KAREN)
-
-//menu
-//nothing écrit dans le rectangle
-//revoir le code et le rendre plus joli
