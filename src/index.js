@@ -84,9 +84,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
 //*** Sakura ****************************************************************************************************************************/
 //cerisiers dates floraison
-//coordonnées gps+ coordonnes japon + notre fichier
 //on importe tout d'un coup
-//fn qui s'appelle elle même
 //fonction auto-exécutante
 (async () => {
   const stockageFichiers = await Promise.all([
@@ -94,7 +92,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     d3.csv("../data/sakura_full_bloom_dates_map.csv"),
     d3.csv("../data/worldcities.csv"),
   ]);
-  //demander à karen
+
   d3.csv("../data/haiku_karen.csv").then(function (dataHaiku) {
     const [japan, sakuras, worldcities] = [
       stockageFichiers[0],
@@ -113,7 +111,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
     //création un svg pour la carte du japon
     const cadre = document.querySelector("#svgSakura");
-    // console.dir(cadre); //-> affiche les propriétés de l'élément
     const hauteur = cadre.clientHeight;
     const largeur = cadre.clientWidth;
     const svg = d3
@@ -149,7 +146,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     sakuras.forEach((sakura) => {
       //villes c'est toutes les villes du Japon de worldcities
       const ville = villes.get(sakura["Site Name"]);
-      //on vérifie s'il y a ville (worldcities)
+      //on vérifie s'il y a ville (worldcities.csv)
       if (ville) {
         sakura.latitude = ville.lat;
         sakura.longitude = ville.lng;
@@ -166,8 +163,8 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
         if (!isNaN(Number(propriete))) {
           const date = ville[propriete];
           if (date) {
-            //car quand on est à la première fois, y a pas de tableau
-            //on stocke des talbeaux dans cet objet donneeParMoisJour
+            //car quand on est à la première fois, il n'y a pas de tableau
+            //on stocke des tableaux dans cet objet donneeParMoisJour
             const isArray = donneeParMoisJour[date] ? true : false;
             const data = {
               siteName: ville["Site Name"],
@@ -224,7 +221,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     //set pour faire valeurs uniques et est un objet
     const annees = new Set();
     //itération sur les dates
-    //tranformer donnesParMoiJour en tableau car c'est un objet via Object.keys
+    //tranformer donnesParMoiJour en tableau car c'est un objet via Object.keys()
     //split pour séparer
 
     Object.keys(donneeParMoisJour).forEach((date) => {
@@ -312,7 +309,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
                 return projection([d.longitude, d.latitude])[1];
               })
               .transition()
-              //500 milisecondes
               //durée de l'animation
               .duration(1000)
               //on définit rayon r
@@ -321,29 +317,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
                 return 3;
               })
               .style("fill", "#fd40b1"), // Rouge du Japon : 0 100 90 0 (#e40521)
-
-          //voir avec karen mais paraît mieux
-          /*(update) =>
-            update
-              .transition()
-              //500 milisecondes
-
-              .duration(500)
-              .attr("cx", (d) => {
-                return projection([d.longitude, d.latitude])[0];
-              })
-              .attr("cy", (d) => {
-                return projection([d.longitude, d.latitude])[1];
-              })
-              .attr("r", (d) => {
-                //return estEclo(d, year, month) ? 3 : 0;
-                return 3;
-                //on met return 3 car il n'y a pas besoin de trier
-              }),
-*/
-
-          //quand les points disparaissent
-          //(exit) => exit.attr("r", () => 0).remove()
 
           (exit) =>
             exit
@@ -362,7 +335,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     function afficherDate() {
       const jour =
         dateCourante.getDate() <= 9
-          ? //le 0 c'est pour le mois car ça s'écrit 01 par exemple pour le jour
+          ? //le 0 c'est pour le jour car ça s'écrit 01 par exemple pour le 1 er jour
             `0${dateCourante.getDate()}`
           : dateCourante.getDate();
       const mois =
@@ -375,7 +348,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       const dateFormatee = `${annee}-${mois}-${jour}`;
       if (dateCourante.getTime() >= dateFinale.getTime()) {
         dateCourante = new Date(dateDepart);
-        // pour sélectionner les mois de mars - avril - mai de l'éclosion
+        //pour sélectionner les mois de mars - avril - mai de l'éclosion des cerisiers
       } else if (dateCourante.getMonth() > 4) {
         dateCourante.setMonth(2);
         dateCourante.setFullYear(dateCourante.getFullYear() + 1);
@@ -396,6 +369,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       const chosendate = Object.keys(donneeParMoisJour).filter((date) => {
         const donneesdate = date.split("-");
         const year = donneesdate[0];
+
         //on split pour pouvoir comparer anneemenu à year
         if (anneemenu == year) {
           return date;
