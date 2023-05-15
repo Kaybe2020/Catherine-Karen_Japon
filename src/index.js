@@ -140,9 +140,14 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       .enter()
       .append("path")
       .attr("d", path)
-      .style("fill", "#ccc")
-      .style("stroke", "#000");
-
+      .style("fill", "#fbe1f1c1")
+      .style("stroke", "#000")
+      //change la couleur du lieu au survol
+       .on("mouseover", function (event, d) {
+        d3.select(this).style("fill", "#675da6")})
+        .on("mouseout", function (event, d) {
+          d3.select(this).style("fill", "#fbe1f1c1")})
+    ;
     const villesAvecCoordonnees = [];
     //on veut ajouter des longitudes et latitudes à notre fichier csv
     //on veut regarder dans le fichier sakura si les villes correspondent au fichier worldcities
@@ -397,6 +402,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   });
 })();
 
+ 
 
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed_en.csv")
