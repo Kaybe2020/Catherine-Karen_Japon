@@ -285,8 +285,10 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     //fonction pour afficher le nom de l'endroit
     function afficherNomCarte(e) {
       toolType.style.display = "block";
-      toolType.innerHTML = "<b>" + e.target.__data__["stockageFichiers[2]"] + "</b>";
+      toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>";
+      toolType.style.backgroundColor = "#fbe1f1c1";
     }
+    console.log(afficherNomCarte);
 
     function cacherNomCarte(e) {
       toolType.style.display = "none";
@@ -300,9 +302,12 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
           (enter) =>
             enter
               .append("circle")
+              // pour version ordi (au survol)
               .on("mouseover", afficheToolType)
               .on("mouseout", cacherToolType)
               // pour version tablette et natel (au clic)
+              // .on("mouseover", afficheToolType)
+              // .on("mouseout", cacherNomCarte)
               .on("click", function (e) {
                 if (toolType.style.display == "block") {
                   cacherToolType(e);
@@ -387,22 +392,6 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
       dateCourante = new Date(chosendate);
     });
-
-    // afficher nom de l'endroit survolé
-    // d3.select("#svgSakura").on("mouseover", function () {
-    //   if (toolType.style.display == "none") {
-    //     afficherNomCarte();
-    //   } else {
-    //     cacherNomCarte();
-    //   }
-    // });
-    // d3.select("#svgSakura").on("click", function () {
-    //   if (toolType.style.display == "block") {
-    //     cacherNomCarte();
-    //   } else {
-    //     afficherNomCarte();
-    //   }
-    // });
 
     play();
   });
