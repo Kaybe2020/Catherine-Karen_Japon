@@ -144,10 +144,19 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
       .style("stroke", "#000")
       //change la couleur du lieu au survol
        .on("mouseover", function (event, d) {
-        d3.select(this).style("fill", "#675da6")})
+        d3.select(this).style("fill", "#675da6")
+        svg
+        .append("text")
+        .attr("class", "nomLieu")
+        // .attr("x", event.pageX+10)
+        // .attr("y", event.pageY+10)
+        .text(d.properties.name);    
+        })  
         .on("mouseout", function (event, d) {
-          d3.select(this).style("fill", "#fbe1f1c1")})
-    ;
+          d3.select(this).style("fill", "#fbe1f1c1")
+          svg.selectAll(".nomLieu").remove();
+        })
+       
     const villesAvecCoordonnees = [];
     //on veut ajouter des longitudes et latitudes à notre fichier csv
     //on veut regarder dans le fichier sakura si les villes correspondent au fichier worldcities
@@ -291,7 +300,7 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     function afficherNomCarte(e) {
       toolType.style.display = "block";
       toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>";
-      toolType.style.backgroundColor = "#fbe1f1c1";
+      // toolType.style.backgroundColor = "#fbe1f1c1";
     }
     console.log(afficherNomCarte);
 
