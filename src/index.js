@@ -7,6 +7,7 @@
 // Importation D3 (plus simple que de faire toutes les importations de ce que l'on a besoin)
 import * as d3 from "d3";
 
+
 //*** menu burger ***********************************************************************************************************************/
 d3.select("#menu").on("click", function () {
   const menu = document.querySelector("#menuDeroulant").classList;
@@ -30,6 +31,7 @@ menuImg.addEventListener("mouseout", function () {
   this.src = "../img/menuV1.png";
 });
 
+
 //*** Haiku ******************************************************************************************************************************/
 d3.csv("../data/haiku_karen.csv").then(function (data) {
   let haikuListe = {
@@ -43,7 +45,8 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     haikuListe.haikus.push(
       [haiku.ligne01, haiku.ligne02, haiku.ligne03].join("<br>")
     );
-    haikuListe.haijin.push([haiku.source]); //haiku.title, : enlevé car les haikus  n'ont pas de titre
+    haikuListe.haijin.push([haiku.source]); 
+    //haiku.title, : enlevé car les haikus  n'ont pas de titre
     haikuListe.explication.push(haiku.explication);
   });
 
@@ -82,10 +85,11 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
   //logique extraite  pour pouvoir l'appeler au clic du bouton mais aussi lors de son appel initial
 });
 
+
 //*** Sakura ****************************************************************************************************************************/
-//cerisiers dates floraison
 //on importe tout d'un coup
 //fonction auto-exécutante
+
 (async () => {
   const stockageFichiers = await Promise.all([
     d3.json("../data/japan.geojson"),
@@ -261,36 +265,33 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
     function afficheToolType(e) {
       //display "block" pour afficher le rectangle
       toolType.style.display = "block";
-
-      //chercher la ville dans le tableau hiaku et trouver son index
+      //chercher la ville dans le tableau haiku et trouver son index
       const index = haikuVille.provenance.indexOf(
         e.target.__data__["siteName"]
       );
+
       //ajouter titre haiku et nom haijin
-      toolType.innerHTML =
-        "<b>" +
-        e.target.__data__["siteName"] +
-        "</b>" +
-        "<br>" +
-        "<br>" +
-        "Haiku(s) made on this place :" +
-        "<br>" +
-        haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
+      toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>" + "<br>" + "<br>" + "Haiku(s) made on this place :" +  "<br>" + haikuVille.haikuJin[index]; //\n est pour un retour à la ligne dans un innerText
       // S'il n'y a pas de haiku, changer undefined en autre chose
       if (haikuVille.haikuJin[index] == undefined) {
-        toolType.innerHTML =
-          "<b>" +
-          e.target.__data__["siteName"] +
-          "</b>" +
-          "<br>" +
-          "<br>" +
-          "No haiku made on this place yet";
+        toolType.innerHTML = "<b>" + e.target.__data__["siteName"] + "</b>" + "<br>" +  "<br>" +  "No haiku made on this place yet";
       }
     }
+
     function cacherToolType(e) {
       toolType.style.display = "none";
     }
 
+    //fonction pour afficher le nom de l'endroit
+    function afficherNomCarte(e) {
+      toolType.style.display = "block";
+      toolType.innerHTML = "<b>" + e.target.__data__["stockageFichiers[2]"] + "</b>";
+    }
+
+    function cacherNomCarte(e) {
+      toolType.style.display = "none";
+    }
+    
     function afficher(data) {
       svg
         .selectAll("circle")
@@ -299,9 +300,16 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
           (enter) =>
             enter
               .append("circle")
-
               .on("mouseover", afficheToolType)
               .on("mouseout", cacherToolType)
+              // pour version tablette et natel (au clic)
+              .on("click", function (e) {
+                if (toolType.style.display == "block") {
+                  cacherToolType(e);
+                } else {
+                  afficheToolType(e);
+                }
+              })
               .attr("cx", (d) => {
                 return projection([d.longitude, d.latitude])[0];
               })
@@ -379,14 +387,31 @@ d3.csv("../data/haiku_karen.csv").then(function (data) {
 
       dateCourante = new Date(chosendate);
     });
+
+    // afficher nom de l'endroit survolé
+    // d3.select("#svgSakura").on("mouseover", function () {
+    //   if (toolType.style.display == "none") {
+    //     afficherNomCarte();
+    //   } else {
+    //     cacherNomCarte();
+    //   }
+    // });
+    // d3.select("#svgSakura").on("click", function () {
+    //   if (toolType.style.display == "block") {
+    //     cacherNomCarte();
+    //   } else {
+    //     afficherNomCarte();
+    //   }
+    // });
+
     play();
   });
 })();
 
+
 //*** Traduction Kanji ******************************************************************************************************************/
 d3.csv("../data/joyo_processed_en.csv")
   .then(function (data) {
-    // Code de la visualisation ()
     let kanjiListe = {
       ecritJap: [],
       traduction: [],
@@ -435,6 +460,7 @@ d3.csv("../data/joyo_processed_en.csv")
   .catch(function (error) {
     console.log(error);
   });
+
 
 //*** Ramen *****************************************************************"""""""""""""""""""""""""""""""""***************************/
 d3.csv("../data/ramen-ratings.csv").then(function (data) {
@@ -522,6 +548,7 @@ d3.csv("../data/ramen-ratings.csv").then(function (data) {
   });
 });
 
+
 //*** Haijin ***************************************************************************************************************************/
 //le Haijin s'exécute dans la div qui lui est dédiée (#haijin)
 const perso = d3.select("#haijinPerso");
@@ -567,6 +594,3 @@ histoire.on("scroll", function () {
     stopHaijin();
   }
 });
-
-// A FAIRE :
-// - Faire les 2 autres media queries (MATHILDE + KAREN)

@@ -208,26 +208,29 @@ select option:checked {
 }
 
 #menu {
+    display:block;
     text-align: center;
     z-index: 1000;
 }
 
 
 #menuBurger {
+    position: relative;
     width: 10%;
+    z-index: 10000;
 }
 
 #menuDeroulant {
     transform: translateX(-500%);
     transition: transform 0.4s ease-in-out;
+    position:absolute;
+    z-index: 2;
 }
 
 #menuDeroulant.active {
+    display:block;
     transform: translateX(0);
-    position: relative;
-    /*mettre en absolu dans petite taille padding 0 -> 32*/
-    z-index: 1000;
-}
+} 
 
 ul {
     list-style-type: none;
@@ -254,6 +257,8 @@ li a:hover {
 
 
 #histoire {
+    display: flex;
+    flex-direction: column;
     background-color: #f0f0f0e1;
     width: 75%;
     /* pour pouvoir scroll dans la div */
