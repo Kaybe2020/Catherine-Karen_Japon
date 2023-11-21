@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A walk in Japan</title>
+
+    <!-- importation favicon -->
+    <link rel="icon" type="image/png" href="/assets/favicon-fefcec0f.png" />
+    <!--favicon pour internet explorer-->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon-73774feb.ico" />
+
+    <!-- lier CSS -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- lier JS -->
+    
+
+     <!-- lier au bouton play/pause sakura -->
+    <script src="https://cdn.lordicon.com/bhenfmcm.js" defer></script>
+  <script type="module" crossorigin src="/assets/index-1f541821.js"></script>
+</head>
+
+<body>
+    <!-- <header></header> pas besoin pour ce site -->
+    <main>
+        <div id="haikus">
+            <p id="haiku"></p>
+            <div id="alignementInfoHaiku">
+                <!-- affiche bouton aléatoire depuis site lordicon-->
+                <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
+                <lord-icon src="https://cdn.lordicon.com/akuwjdzh.json" trigger="hover" colors="primary:#f823a3"
+                    id="buttonHaikuChange" alt="bouton aléatoire pour changer les haikus et ses informations.">
+                </lord-icon>
+                <p id="titleAuthor"></p>
+            </div>
+        </div>
+
+        <!-- Pour l'overlay de la source des haikus -->
+        <div id="overlay" class="overlay">
+            <div id="popup" class="popup"></div>
+        </div>
+
+        <div id="zoneScroll">
+
+            <div id="menuBurger">
+                <div id="menu">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAACXBIWXMAAAsSAAALEgHS3X78AAAFEklEQVRYhdVZXWgcVRT+djaTZPO7bbeWONJuRhCklEYEzUNrWrH1N2YfBEsREpEqFbV58MEq2DRUWvShLaitSGmjIj4UTWwl4ks2NsVYULIUX6RdNtBRKrFJTNKkmWRXzt0708lkdudnb6R+EHbn7s253z1z7vm7oVwuB9HQZHWbReSIoqcnRC5REmlNVqMAEgCIZBOAzUWmj9IGACQB9Cp6OhN03UCkuSY7AbRZxyt2b8StL39bNp/GCbbfUgCOKXr6jN/1Jb9kNVklTQ04EV79wUeoPfzckv+p//glxHrOoW7Py3Zx9FZOa7Ka0WS1ww8PT5rmZtAFYF+hOWu+PYib/f1YdfgkZs/3YPyFo4xwzZ53rHKKLTNIb0/R0yNufMo8ECZb7QWwodi8ikfaML73CKbWH0Ldm++zsarnX2efuZl/cOvHPrelWsjeNVntdDOZouahyWqCH5zihHdvRKi6DlltFjMffsdIGoTn+j/H2K42tilJibgRr+cmcywQaW5n33BBRVG5pTkvTIkw4oZW54fO4e9nD2D++1G2qerXnnYTZWCfJqsFte1ImptE0d06QW7J26xUG2WfZffd9oB66gIqm7f6EddOpuKJND90SS8atqN80/1spHxLa174XetR/kTesuTNW5dswiOO2gKVM2l+6HwTJkR2tDKSY+2t5li4sQFlD8fMTQRAL1ekM2luxy1BJINrMzs+g9yNafY8/el7mD0xjEgir6zFq5eDiK23m6pd011BpGYnJ83vFY8+gNDqGnYIJ189xcboDbB504FTkHarmZjBhWv5dBCJ9PqJ7OxnQ8x7GK6NvhuI7G1GdnLKMcx7RJ+ipxN20hk3f3wHoJESLQm3XdydThg8STNt2lfC4gbyIGsHjrN8xPAcgpCwkl7mC0shHPuqD3PDF1joXjd0yUxNBWCDJqtxiftA316/EKKHurFwJYWp/WdZtgdLmBeEJolXHMJAvnrxjwzzIJXb8yn33NCwcNJxkRIJ5Q+2YN2lfiz8nmLRsQQ35wTxpCnqGeH65g/nRRMmRH2VW15wo/MNlk8T8Wj3J1D0NAssIiGcNOXOfz3+GEv+ifzEu6+w/EMkQtfKGinfOCCa/ApiUOK9iP8TWBgX1v2h6GdEQPr0UBMGQUZS9HRSlLTstRnEek6hev8OrP36LNZ8cWQliI8YBzElQhqloqHaelTtfAbXH3oS2akJxPpOihBtRdIgLUzbi3+OItwQZxug5g1FSNK8IKSomWmQ9t1PK4bwvZvYr5T0E0jzgsB4MtK8FSXERAxUWDK7UG3UbbpX9MIWXHz3OZwQblixWqLHaA+bvTzqn2my2lVqBTP/yyDCd8exePU6e6aKfP6ykPzDLLqXdE15xTsgYgXBOK7oabPbtCT34D7btb35H2PU3tpwSpg6SjmUVBtSX5qCCh1GerYeygBI2O9slpHmE4j4ZJAVqI9HjXTpnmpWZtFz1VM7gxJ+0anJ7pia8onb/BI3mo2Uki78PGaOz138KShhx/hRMJ8OSpxAha0V+q9X/IooSBhuRQAn3uTVxqkAgIOvtmrdBaSg7SVdX3DiGUVPE/GDXlalioVKLUpNjSrcY6ZHXivuJev0dY9IjRLuftoLzSGCq068xRo1ZCZSTRTj3W8XK3DpVqvLT4oc9PIzzvtqHYUa8Mb9C32SJ3EwEerknAmSz5d8N86jqPFHm3FKA8hW6XwY18zJwPflAP4F7L/gxRV8/I4AAAAASUVORK5CYII=" id="menuImg" alt="Bouton qui permet de faire apparaître le menu">
+                </div>
+
+                <div id="menuDeroulant">
+                    <ul>
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#HaikuExplication">Haikus</a></li>
+                        <li><a href="#sakura">Sakura</a></li>
+                        <li><a href="#kanjis">Kanjis</a></li>
+                        <li><a href="#ramen">Ramens</a></li>
+                        <li><a href="#conclusion">Conclusion</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="histoire">
+
+                <p id="introduction" class="HaijinStory">
+                    こんにちは,
+                    <br> It 's writing "Konnichiwa" that means hello in Japanese. Let me introduce myself, I'm the
+                    little guy on the right of your screen !
+                    <br> My name is Kobayashi Issa. I live in the Edo era (1603 - 1868) in Kyoto.
+                    Since I was a child, I have had a passion for writing and books.
+                    <br> Being born in a modest family, I had to start working very early. One day, in the year of my
+                    twentieth birthday, I decided to talk to my father that I was leaving and then I left home to start my life as a haijin.
+                    <br> A haijin is a Japanese poet who looks at what is going on around him and expresses deep
+                    feelings through short poems.
+                    <br> Follow me to see one of my typical days !
+                </p>
+                <div id="HaikuExplication">
+                    <p class="legend">There is a haiku medley with its description and the name of the author (haijin)
+                        in the pink box at the top left of your screen. Don't hesitate to click on the button !</p>
+                    
+                        <p class="explication">
+                        <strong>What is a haiku?</strong>
+                        A haiku doesn't just describe things, it requires the author's detachment. It usually expresses
+                        a feeling. It is a kind of snapshot. It expresses an emotion, a fleeting feeling, the haiku
+                        cannot be worked on, it is quick and concise. However, it doesn't exclude humour and figures of
+                        speech, but all this must be used sparingly. It should be read in one breath, preferably aloud.
+                        It is thought-provoking. It is a poem that isn't written, but lived.
+                        <br>There are several types of haiku, those that evoke the seasons, those that deal with human
+                        weaknesses. But there are also humorous and satirical poems, called Senryu.
+                        <br>
+                        <a class="aligneCentre">Haiku are generally written in three lines, for example :<br>
+                            "Spring rain<br>
+                            All things<br>
+                            Beautifies (Chiyo-ni)"<br>
+                            It must have a caesura and 17 mores (syllables) divided into three parts 5-7-5 :<br>
+                            ha-tsu shi-gu-re (5) => The first rain <br>
+                            sa-ru mo ko-mi-no wo (7) => The monkey also wants <br>
+                            ho-shi-ge na-ri (5) => A little coat.</a>
+                        A haiku must have as its main theme a season of which it evokes the presence in an implicit or
+                        explicit way, but one must end up understanding the theme.
+                        <br>The haijin (the poet), through this short text, tries to capture a moment of everyday life.
+                        He doesn't give free expression to his feelings, but seeks to awaken a sensitivity with the help
+                        of a reality (often associated with the natural world) which may seem banal to the reader.
+                        <br>Finally, the syntax of a haiku should be simple.
+
+
+                    </p>
+                </div>
+
+                <p class="HaijinStory">
+                    Finding inspiration is sometimes difficult, which is why I like to walk along paths filled with
+                    cherry blossom trees. Sometimes I even sit under one of these majestic trees to gain serenity.
+                    These trees give off a lot of calm and soothe me. Thus, I can write more easily and with much
+                    wisdom.
+                    <br>The cherry trees don't bloom at the same time in Japan, so it is complicated to predict them
+                    accurately. I change places of inspiration quite often because these places are magical and give birth to their
+                    own haiku.
+                    <br>Look at the number of magical places per year. The adventure never ends !
+                </p>
+
+                <div id="sakura">
+                    <div id="menuYear"> <select name="years" id="year-select">
+                        <option value="1953" >Choose a year</option>
+                    </select>
+                        <button id="playButton" > 
+                            <lord-icon
+                                src="https://cdn.lordicon.com/ensnyqet.json"
+                                trigger="morph"
+                                colors="primary:#5fa7d7"
+                                style="width:20px;height:20px">
+                            </lord-icon> </button>
+                    </div>
+                    <div id="toolType"></div>
+                    <div id="datesEvolution"> </div>
+                    <div id="svgSakura"> </div>
+                    <p class="legend">Map showing cherry blossoms in Japan from 1953 to 2020
+                        <br>The animation scrolls day after day during tree months of blossom (on March, April, May), every year. The blossoms is represented by a pink circle.
+                    </p>
+                    <p class="explication">
+                        <strong>What is a sakura ?</strong>
+                        The transience of the sakura's bloom has been used for centuries as a metaphor to emphasise the
+                        ephemeral nature of both beauty and life. The sakura is thus used to explain the important
+                        Japanese aesthetic concept of mono no aware (which can be translated as "sensitivity to the
+                        ephemeral").
+                        <br>The cherry blossom is one of the most significant natural events in spring in Japan.
+                        Traditionally associated with the Hanami festivities, the cherry blossom is a very important
+                        symbol for the Japanese. Much more than a simple flower, it is part of a centuries-old
+                        philosophical trend and is today the emblem of an entire nation.
+                        <br>Although today we take advantage of it to picnic and spend a pleasant moment with our loved
+                        ones, it is important to know that it was not always like this. For a long time, cherry blossom
+                        viewing was considered more of a philosophical activity than a simple moment of relaxation when
+                        the weather was fine.
+                        <br>With an average lifespan of two weeks, sakura trees are the very embodiment of the
+                        ephemeral. Their petals can only be admired for a very short period of time, and their lightning 
+                        passage on earth undoubtedly sends the admirer back to his or her own mortality. It is this mirror 
+                        effect that encourages introspection and has made hanami a popular calendar event for artists and
+                        philosophers throughout history.
+                    </p>
+                </div>
+
+                <p class="HaijinStory">
+                    The passion for writing has never left me. The beauty that can be found in these kanji (Japanese
+                    alphabet originating from China) still amazes and fascinates me. That's why at some point in my day,
+                    I will study these stroke movements to learn more. There are so many kanji, it will take me a while
+                    to get through them all !
+                    <br>I'll show you the ones I'm studying today :
+                </p>
+
+                <div id="kanjis">
+                    <div id="AlignementKanji">
+                        <div id="kanjiAleatoirs"></div>
+                        <!-- affiche bouton aléatoire depuis site lordicon-->
+                        <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
+                        <lord-icon src="https://cdn.lordicon.com/akuwjdzh.json" trigger="hover" colors="primary:#5fa7d7"
+                            id="buttonKanjisChange"
+                            alt="Bouton qui permet de faire changer les kanjis de manière aléatoire.">
+                        </lord-icon>
+                    </div>
+                    <p class="legend">Here is a list of random kanji. Don't hesitate to click on the button if you
+                        find the exercise too easy, there is a lot to know !</p>
+
+                    <p class="explication">
+                        <strong>What is a kanji?</strong>
+                        Kanjisa (漢字) are signs derived from Chinese characters whose role is to write a part of the
+                        Japanese language. A kanji represents one or more "readings". Kanji readings are derived either 
+                        from ancient Chinese languages or from the original Japanese language (Yamato kotoba), which is 
+                        not related to the Chinese languages.
+                        <br>Mastering Kanji takes time, especially given the large number of signs used in practice and
+                        the fact that a significant proportion of them have several readings at their disposal.
+                        The Japanese language is atonic, and the compilation of kanji gave rise to numerous homophones.
+                        Only the writing is authentic. For this reason - and for other historical and cultural reasons -
+                        it would not be possible today to abolish kanji and establish a purely phonetic script. But the
+                        language is still evolving, and contemporary means of communication are not hindered in Japan.
+                        On the contrary, kanji have advantages: they are condensed information.
+                        <br>This script remains very limited and is not really learned by the people. This is why
+                        simplified scripts were created. This group of two new alphabets (hiragana and katakana) will be called
+                        "kana".
+                        <br>Hiragana derives from a set of kanji used in a purely phonetic way. In the past, there were
+                        many more hiraganas (almost three hundred). For a given syllable, these syllabic characters were
+                        used interchangeably, until the orthographic reform of 1900 which reduced the number to one character
+                        per syllable. These phonetic characters were written in cursive style, and the character as a
+                        whole underwent a very strong stylisation of the strokes. Hiragana was accessible to women (they
+                        were called onnate, the women's hand), who only had access to elementary education: major
+                        works of the Heian period (794-1185) were thus written by women in hiragana.
+                        <br>The katakanas have a parallel origin: they result from a deliberate simplification of
+                        man'yōgana for the use of monastery students, and date from the ninth century (early Heian
+                        period). They were formed by retaining for each syllable only a few simple, easily traced strokes
+                        characteristic of a particular man'yōgana, hence their name kata (片, 'partial, fragment'). These
+                        strokes were later somewhat distorted by cursive tracing. Because of their origin, katagana are
+                        visually much simpler than hiragana, and faster to draw.
+                        <br>The two syllabaries (hiragana and katakana) make it possible to note all of the existing
+                        sounds of the Japanese language (which could be written with these syllabaries alone). However,
+                        the numerous homonyms present in Japanese would make it difficult to understand the meaning of
+                        certain words; hence the interest of kanji.
+                    </p>
+                </div>
+
+                <p class="HaijinStory">
+                    At the end of the day, after a hard day's work and to recharge my body, I eat ramen in the
+                    small restaurant in my village. It offers 5 different types of ramen per day. I read the
+                    descriptions of the products carefully before deciding. They are all worth trying.
+                    <br> Could you make a choice among the ones of the day ?
+                </p>
+
+                <div id="ramen">
+                    <div id="ramensAleatoirs"></div>
+                    <p class="legend">いらっしゃいませ (“Irasshaimase” means welcome.)
+                        <br> The dishes are rated out of five stars and are classified accordingly, click on them to have
+                        their description and take your pick !
+                    </p>
+                    <p class="explication">
+                        <strong>What is a ramen?</strong>
+                        Ramen is basically a dish of noodles, accompanied by a soup that gives them flavour. It is
+                        an essential part of Japanese gastronomy, which has the particularity of being constantly
+                        renewed over the last few decades.
+                        <br>This popular dish, which remains a simple and nutritious way of eating noodles, was
+                        originally influenced by Chinese culinary traditions. It was eaten in the trading ports of Japan in the
+                        mid-19th century, prepared by Chinese who worked as dockers or cooks at the time.
+                        <br>At the beginning of the 20th century, by adding soy sauce and dashi, the Japanese created
+                        ramen, which quickly became popular. After the Second World War, in a quest for renewal and with the advent
+                        of instant noodles, ramen became a real success and spread to the Japanese islands. From then
+                        on, there was a wide variety of ramen and the ingredients were many and original, depending on
+                        the season and the region, but also on the meats used. This diversity and craze around ramen has
+                        given rise to a permanent national competition, always positive, which favours "kodawari", the
+                        attention to detail that makes the difference in the composition and creation of a ramen.
+                        <br><div class="aligneCentre">
+                            Ramen is composed of five elements: <br>
+                            The noodles,<br>
+                            the soup or broth,<br>
+                            the oil,<br>
+                            the toppings (accompaniments, that go with the ramen),<br>
+                            the taré (a savoury base that the chef usually holds the secret of making.)</div>
+                    </p>
+                </div>
+
+                <p class="HaijinStory" id="conclusion">
+                    We have arrived at the end of the day. I hope you had fun and learned some things. Come back whenever
+                    you want for a new lesson. If now you want to go to Japan, my job is done ! Think of me when you'll be there !
+                    <br>Now is the time to read your last haiku before going to sleep. おやすみ*
+                    <br>
+                <p class="HaijinStory" id="fin"> 終わり**</a>
+                <p class="legend">(*« oyasumi », good night **« owari », the end)</p>
+                </p>
+
+            </div>
+
+            <div id="haijin">
+                <!--Importation img Haijin en SVG -->
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                    y="0px" viewBox="0 0 135 135" style="enable-background:new 0 0 135 135;" xml:space="preserve">
+                    <image style="overflow:visible;" width="225" height="225" id="haijinPerso"
+                        xlink:href="/assets/perso-masculin-cb2f26d6.png" transform="matrix(0.6 0 0 0.6 0 0)">
+                    </image>
+                </svg>
+
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2023 Japan - D3 project - Bonfils Karen & Mauron Catherine</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,430 @@
+/* importer fonts */
+@font-face {
+    font-family: 'bonzairegular';
+    src: url('./fonts/bonzai-webfont.woff2') format('woff2'),
+        url('./fonts/bonzai-webfont.woff') format('woff'),
+        url('./fonts/bonzai-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ShipporiMincho';
+    src: url('./fonts/ShipporiMincho-Regular.woff2') format('woff2'),
+        url('./fonts/ShipporiMincho-Regular.woff') format('woff'),
+        url('./fonts/ShipporiMincho-Regular.ttf') format('truetype');
+    font-weight: normal, bold, medium, regular, semibold, extra-bold;
+    font-style: normal, italic;
+}
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'ShipporiMincho';
+    font-size: normal;
+}
+
+body {
+    background-image: url("../img/background.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+
+
+}
+
+main {
+    margin-top: 7%;
+    margin-bottom: 0;
+    width: 100%;
+    height: 83%;
+
+}
+
+.HaijinStory {
+    font-family: 'bonzairegular';
+    font-size: 1.7rem;
+    text-align: center;
+    color: #640137;
+    /* espacer les lignes */
+    line-height: 1.5;
+}
+
+.explication {
+    display: flex;
+    flex-direction: column;
+    line-height: 2;
+    margin-bottom: 0;
+    color: #380120;
+}
+
+.legend {
+    font-family: 'shipporimincho';
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #003282;
+}
+
+/* Pour changer la barre de scroll **************************/
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #f823a3 #fbe1f1c1;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+
+}
+
+/*Change la couleur de la barre de l'ascenceur*/
+*::-webkit-scrollbar-track {
+    background: #fbe1f1c1;
+    border-radius: 10px;
+}
+
+/*cible l'ascenseur lui-même*/
+*::-webkit-scrollbar-thumb {
+    background-color: #f823a3;
+    border-radius: 10px;
+}
+
+/*change la couleur de selection d'un menu déroulant*/
+select {
+    background-color: #fbe1f1c1;
+    color: #f823a3;
+    font-family: 'bonzairegular';
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+
+/*change le bleu de sélection de base du menu deroulant*/
+select option:checked {
+    background-color: #f823a3;
+    color: #fbe1f1c1;
+}
+
+/***********************************************************************/
+/*change la couleur de selection texte*/
+::selection {
+    background-color: #fbe1f1c1;
+    color: #fd40b1;
+    ;
+}
+
+/* Firefox */
+::-moz-selection {
+    background-color: #fbe1f1c1;
+    color: #fd40b1;
+    ;
+}
+
+/* Pour les données sur les haikus **************************/
+#haikus {
+    width: 20%;
+    margin-left: 10%;
+    margin-bottom: 2rem;
+    padding: 8px 16px;
+    background-color: #fbe1f1c1;
+    border-radius: 10px;
+}
+
+#haiku {
+    text-align: center;
+    /* pour les mots trop longs, évite la césure*/
+    word-break: normal;
+    color: #fd40b1;
+    font-family: 'bonzairegular';
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+#titleAuthor {
+    text-align: right;
+    color: #fd40b1;
+    word-wrap: normal;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin: 2% 0 0 0;
+}
+
+#alignementInfoHaiku {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+#buttonHaikuChange {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    width: 25%;
+    height: 40%;
+    top: 0px;
+    left: 0px;
+    display: none;
+    margin-left: 37%;
+}
+
+/* mise en forme du popup */
+.popup {
+    margin: 10% 0;
+    width: 80%;
+    font-family: 'ShipporiMincho';
+    font-weight: semibold;
+    border-radius: 5px;
+    color: #335fa7d7;
+    box-shadow: 10px 10px 10px rgba(38, 125, 183, 0.5);
+    background-color: rgb(252, 254, 255);
+    /*pour faire une ombre*/
+    padding: 0.8em;
+}
+
+
+#zoneScroll {
+    width: 100%;
+    height: 77%;
+    display: flex;
+}
+
+
+/* Pour les données du menu déroulant ************************/
+#menuImg {
+    cursor: pointer;
+}
+
+#menu {
+    display:block;
+    text-align: center;
+    z-index: 1000;
+}
+
+
+#menuBurger {
+    position: relative;
+    width: 10%;
+    z-index: 10000;
+}
+
+#menuDeroulant {
+    transform: translateX(-500%);
+    transition: transform 0.4s ease-in-out;
+    position:absolute;
+    z-index: 2;
+}
+
+#menuDeroulant.active {
+    display:block;
+    transform: translateX(0);
+} 
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #5d8fdfd7;
+}
+
+li a {
+    display: block;
+    color: #f0f0f0;
+    font-family: 'bonzairegular';
+    font-size: 1.5rem;
+    padding: 8px 0px 6px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #fbe1f1c1;
+    color: #f823a3;
+    transition: transform 0.4s ease-in-out;
+}
+
+
+#histoire {
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0e1;
+    width: 75%;
+    /* pour pouvoir scroll dans la div */
+    height: 92%;
+    overflow: auto;
+    padding: 0 16px;
+    /*mettre les bords arrondis*/
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Pour les données sur les kanjis ***************************/
+#kanjis {
+    display: block;
+}
+
+#AlignementKanji {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+    margin-top: 2%;
+}
+
+#kanjiAleatoirs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 60%;
+    height: auto;
+    margin-left: 2%;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+#kanjiAleatoirs>p {
+    margin: 0;
+}
+
+#buttonKanjisChange {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+
+/* Pour les données sur les floraisons sakura *****************/
+#sakura {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+#datesEvolution {
+    width: 10%;
+}
+
+#svgSakura {
+    width: 90%;
+    height: 420px;
+}
+
+
+/* pour données affichées sur carte */
+.hidden {
+    display: none;
+}
+
+#toolType {
+    background-color: #675da6;
+    color: white;
+    text-align: center;
+    position: absolute;
+    padding: 1rem;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+    top: 10%;
+    left: 0;
+    display: none;
+
+}
+
+#toolType:hover {
+    display: flex;
+
+}
+
+/*bouton play/stop*/
+
+#playButton {
+    border: none;
+    background-color: transparent;
+}
+
+#menuYear {
+    display: flex;
+    align-items: center;
+}
+
+/* Pour les données sur les ramens ***************************/
+#ramen {
+    width: 100%;
+}
+
+.ramen-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
+
+#ramensAleatoirs {
+    display: flex;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    cursor: pointer;
+}
+
+
+#ramensAleatoirs>p {
+    width: 20%;
+    margin: 0;
+    text-align: center;
+}
+
+.etoileRamen {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+.description {
+    text-align: center;
+}
+
+.aligneCentre {
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-bottom: 1.2%;
+}
+
+
+/* Pour conclusion ********************************************/
+#fin {
+    margin-top: 2%;
+    text-align: right;
+}
+
+
+/* Pour les données du haikin ********************************/
+#haijin {
+    width: 10%;
+    align-items: end;
+    display: flex;
+}
+
+
+footer {
+    width: 100%;
+    height: 2.5rem;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+}
